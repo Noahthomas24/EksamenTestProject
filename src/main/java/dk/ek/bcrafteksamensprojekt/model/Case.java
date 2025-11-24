@@ -24,19 +24,16 @@ public class Case {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "case_materials",
-            joinColumns = @JoinColumn(name = "case_id"),
-            inverseJoinColumns = @JoinColumn(name = "material_id"))
-    private List<Material> materials = new ArrayList<>();
+    @OneToMany(mappedBy = "c", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CaseMaterial> caseMaterials = new ArrayList<>();
 
-    public Case(Long id, String title, String description, LocalDate createdAt, Customer customer, List<Material> materials) {
+    public Case(Long id, String title, String description, LocalDate createdAt, Customer customer, List<CaseMaterial> caseMaterials) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.createdAt = createdAt;
         this.customer = customer;
-        this.materials = materials;
+        this.caseMaterials = caseMaterials;
     }
 
     public Case() {}

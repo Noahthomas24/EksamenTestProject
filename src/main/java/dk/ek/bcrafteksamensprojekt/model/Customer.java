@@ -17,6 +17,7 @@ public class Customer {
 
     private String firstName;
     private String lastName;
+    private String fullName = firstName +" "+ lastName;
 
     private String phoneNumber;
     private String email;
