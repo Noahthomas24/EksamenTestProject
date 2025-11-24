@@ -39,6 +39,5 @@ public class Case {
         this.materials = materials;
     }
 
-    public Case() {
-    }
+    public Case() {}
 }

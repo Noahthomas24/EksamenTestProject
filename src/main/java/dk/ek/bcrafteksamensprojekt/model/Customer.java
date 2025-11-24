@@ -12,9 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Customer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String firstName;
@@ -41,6 +39,5 @@ public class Customer {
         this.city = city;
     }
 
-    public Customer() {
-    }
+    public Customer() {}
 }

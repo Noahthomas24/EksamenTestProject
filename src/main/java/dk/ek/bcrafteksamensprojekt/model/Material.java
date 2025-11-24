@@ -20,6 +20,5 @@ public class Material {
         this.unit = unit;
     }
 
-    public Material() {
-    }
+    public Material() {}
 }
