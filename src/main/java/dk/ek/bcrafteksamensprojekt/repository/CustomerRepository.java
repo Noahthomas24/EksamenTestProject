@@ -1,4 +1,7 @@
 package dk.ek.bcrafteksamensprojekt.repository;
 
-public class CustomerRepository {
+import dk.ek.bcrafteksamensprojekt.model.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 }
