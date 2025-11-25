@@ -36,7 +36,7 @@ public class MaterialService {
 
     public List<Material> findMaterialsByName(String name){
         return materialRepository.findAll().stream().
-                filter(m -> m.getName().contains(name))
+                filter(m -> m.getName().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
     }
 

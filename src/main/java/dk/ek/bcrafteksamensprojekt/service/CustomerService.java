@@ -42,7 +42,7 @@ public class CustomerService {
     // Filters customers to contain search criteria
     public List<Customer> findCustomersByName(String name){
         return customerRepository.findAll().stream()
-                .filter(c -> c.getFullName().toLowerCase().contains(name))
+                .filter(c -> c.getFullName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
     }
 

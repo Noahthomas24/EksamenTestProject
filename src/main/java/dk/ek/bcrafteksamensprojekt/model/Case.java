@@ -37,4 +37,19 @@ public class Case {
     }
 
     public Case() {}
+
+    // Sets the case on the caseMaterial and then adds the material to the caseMaterial-list
+    public void addCaseMaterial(CaseMaterial caseMaterial) {
+        if (caseMaterial == null) return;
+        caseMaterial.setC(this);
+        this.caseMaterials.add(caseMaterial);
+    }
+
+    // Removes the case on the caseMaterial and then removes the material from the caseMaterial-list
+    public void removeCaseMaterial(CaseMaterial caseMaterial) {
+        if (caseMaterial == null) return;
+        caseMaterial.setC(null);
+        this.caseMaterials.remove(caseMaterial);
+    }
+
 }

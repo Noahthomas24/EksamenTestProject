@@ -8,6 +8,8 @@ import lombok.Setter;
 @Table(name="offer_requests")
 @Getter
 @Setter
+
+// Offer request is the form that comes in when a customer fills out the contact form on the website
 public class OfferRequest {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -4,13 +4,13 @@ import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
 import dk.ek.bcrafteksamensprojekt.model.Case;
 import dk.ek.bcrafteksamensprojekt.model.CaseMaterial;
 import dk.ek.bcrafteksamensprojekt.model.Customer;
-import dk.ek.bcrafteksamensprojekt.model.Material;
 import dk.ek.bcrafteksamensprojekt.repository.CaseMaterialRepository;
 import dk.ek.bcrafteksamensprojekt.repository.CaseRepository;
 import dk.ek.bcrafteksamensprojekt.repository.CustomerRepository;
 import dk.ek.bcrafteksamensprojekt.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,23 +44,33 @@ public class CaseService {
                 .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
     }
 
+    // @Transactional: Runs this method inside one database transaction so JPA can safely update Case and CaseMaterial together
+    // If one of the DB queries fail, they are both rolled back, so one is not updated without the other
+    @Transactional
     public Case addMaterialToCase(Long id, CaseMaterial caseMaterial){
         Case c = caseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
 
-        c.getCaseMaterials().add(caseMaterial);
+        c.addCaseMaterial(caseMaterial);
 
         return caseRepository.save(c);
     }
 
+
+    @Transactional
     public Case deleteMaterialFromCase(Long id, Long caseMaterialId){
         Case c = caseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
 
         CaseMaterial caseMaterial = caseMaterialRepository.findById(caseMaterialId)
-                .orElseThrow(() -> new NotFoundException("Sagsmateriale ikke fundet med id "+id));
+                .orElseThrow(() -> new NotFoundException("Sagsmateriale ikke fundet med id "+caseMaterialId));
 
-        c.getCaseMaterials().remove(caseMaterial);
+        if (!caseMaterial.getC().getId().equals(id)){
+            throw new NotFoundException("Sagsmateriale med id " + caseMaterialId + " tilhører ikke sag "+id);
+        }
+
+        c.removeCaseMaterial(caseMaterial);
+        caseMaterialRepository.delete(caseMaterial);
 
         return caseRepository.save(c);
     }
