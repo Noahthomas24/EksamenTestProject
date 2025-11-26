@@ -46,6 +46,10 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
+    public List<Customer> findAllCustomers(){
+        return customerRepository.findAll();
+    }
+
     public void deleteCustomer(Long id){
         Customer customer = customerRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Kan ikke finde kunde med id "+id));
