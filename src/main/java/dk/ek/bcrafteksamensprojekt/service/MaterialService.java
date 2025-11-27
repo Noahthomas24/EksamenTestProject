@@ -33,12 +33,12 @@ public class MaterialService {
         return materialRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Materiale ikke fundet med id "+ id));
     }
-
-    public List<Material> findMaterialsByName(String name){
+    public List<Material> findMaterialsByName(String name) {
         return materialRepository.findAll().stream().
-                filter(m -> m.getName().contains(name.toLowerCase()))
+                filter(m -> m.getName().contains(name))
                 .collect(Collectors.toList());
     }
+
 
     public void deleteMaterialById(Long id){
         Material material = materialRepository.findById(id).
