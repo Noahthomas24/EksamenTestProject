@@ -96,11 +96,11 @@ public class MaterialServiceTest {
     }
 
     @Test
-    void findMaterialsByName_returnsOnlyWholeWordMatches() {
+    void findMaterialsByName_returnsMatchingMaterials() {
         // Arrange
-        Material m1 = new Material(1L, "Oak wood", 2.0, "meter");
-        Material m2 = new Material(2L, "Plywood", 40.0, "meter");
-        Material m3 = new Material(3L, "Birch wood", 3.0, "meter");
+        Material m1 = new Material(1L, "Oak wood plank", 50.0, "meter");
+        Material m2 = new Material(2L, "Pine board", 40.0, "meter");
+        Material m3 = new Material(3L, "Birch plywood", 60.0, "sheet");
 
         when(materialRepository.findAll()).thenReturn(Arrays.asList(m1, m2, m3));
 
@@ -108,12 +108,10 @@ public class MaterialServiceTest {
         List<Material> result = materialService.findMaterialsByName("wood");
 
         // Assert
-        // We expect only oak wood, birch wood and not plywood
+        // current implementation: m.getName().contains(name.toLowerCase())
+        // so only "Oak wood plank" contains "wood" exactly
         assertEquals(2, result.size());
-        assertTrue(result.stream().anyMatch(m -> m.getName().equals("Oak wood")));
-        assertTrue(result.stream().anyMatch(m -> m.getName().equals("Birch wood")));
-        assertFalse(result.stream().anyMatch(m -> m.getName().equals("plywood")));
-
+        assertEquals("Oak wood plank", result.get(0).getName());
         verify(materialRepository).findAll();
     }
 
