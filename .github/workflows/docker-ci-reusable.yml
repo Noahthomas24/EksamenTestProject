@@ -13,7 +13,7 @@ jobs:
           docker compose up -d
           
           # Wait for a few seconds to ensure the container is up and running
-          sleep 40
+          sleep 100
           
           # Test the application endpoint
           curl -f http://localhost:8080/actuator/health || exit 1
