@@ -39,9 +39,20 @@ public class CaseService {
         return caseRepository.save(existing);
     }
 
+    public List<Case> findAllCases() {
+        return caseRepository.findAll();
+    }
+
     public Case findCaseById(Long id){
         return caseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+    }
+
+    public void deleteCase(Long id) {
+        Case c = caseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+
+        caseRepository.delete(c);
     }
 
     // @Transactional: Runs this method inside one database transaction so JPA can safely update Case and CaseMaterial together
@@ -71,6 +82,26 @@ public class CaseService {
 
         c.removeCaseMaterial(caseMaterial);
         caseMaterialRepository.delete(caseMaterial);
+
+        return caseRepository.save(c);
+    }
+
+    @Transactional
+    public Case updateMaterialOnCase(Long id, Long caseMaterialId, CaseMaterial updated){
+        Case c = caseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+
+        CaseMaterial existing = caseMaterialRepository.findById(caseMaterialId)
+                .orElseThrow(() -> new NotFoundException("Sagsmateriale ikke fundet med id "+caseMaterialId));
+
+        if (!existing.getC().getId().equals(id)) {
+            throw new NotFoundException("Sagsmateriale med id " + caseMaterialId +
+                    " tilhører ikke sag " + id);
+        }
+
+        existing.setDescription(updated.getDescription());
+        existing.setQuantity(updated.getQuantity());
+        existing.setUnitPrice(updated.getUnitPrice());
 
         return caseRepository.save(c);
     }

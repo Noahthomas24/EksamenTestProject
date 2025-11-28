@@ -1,6 +1,7 @@
 package dk.ek.bcrafteksamensprojekt.service;
 
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
+import dk.ek.bcrafteksamensprojekt.model.Case;
 import dk.ek.bcrafteksamensprojekt.model.Material;
 import dk.ek.bcrafteksamensprojekt.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,11 @@ public class MaterialService {
         return materialRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Materiale ikke fundet med id "+ id));
     }
+
+    public List<Material> findAllMaterials() {
+        return materialRepository.findAll();
+    }
+
     public List<Material> findMaterialsByName(String name) {
         return materialRepository.findAll().stream().
                 filter(m -> m.getName().contains(name))
