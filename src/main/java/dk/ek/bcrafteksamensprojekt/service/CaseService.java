@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CaseService {
@@ -27,6 +25,14 @@ public class CaseService {
                 .orElseThrow(() -> new NotFoundException("Kunde ikke fundet med id "+customerId));
         c.setCustomer(customer);
         return caseRepository.save(c);
+    }
+
+    public Case saveCase(Case c){
+        return caseRepository.save(c);
+    }
+
+    public CaseMaterial saveCaseMaterial(CaseMaterial c){
+        return caseMaterialRepository.save(c);
     }
 
     public Case updateCase(Long id, Case updated) {
@@ -56,7 +62,6 @@ public class CaseService {
         return caseRepository.save(c);
     }
 
-
     @Transactional
     public Case deleteMaterialFromCase(Long id, Long caseMaterialId){
         Case c = caseRepository.findById(id)
@@ -74,5 +79,6 @@ public class CaseService {
 
         return caseRepository.save(c);
     }
+
 
 }

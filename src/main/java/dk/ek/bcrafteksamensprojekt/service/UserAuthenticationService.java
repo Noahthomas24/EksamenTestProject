@@ -34,4 +34,10 @@ public class UserAuthenticationService {
         u.setPassword(hash);
         return userRepository.save(u);
     }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+
 }

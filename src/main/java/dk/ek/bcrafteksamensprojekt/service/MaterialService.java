@@ -45,4 +45,5 @@ public class MaterialService {
                 orElseThrow(() -> new NotFoundException("Materiale ikke fundet med id "+id));
         materialRepository.delete(material);
     }
+
 }
