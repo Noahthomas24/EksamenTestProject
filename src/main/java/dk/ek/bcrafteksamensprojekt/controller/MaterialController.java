@@ -37,7 +37,7 @@ public class MaterialController {
     // Create material
     @PostMapping
     public ResponseEntity<Material> createMaterial(@RequestBody Material material) {
-        Material saved = materialService.saveMaterial(material);
+        Material saved = materialService.createMaterial(material);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
@@ -45,7 +45,7 @@ public class MaterialController {
     @PutMapping("/{id}")
     public ResponseEntity<Material> updateMaterial(@PathVariable Long id, @RequestBody Material material) {
         material.setId(id);
-        return ResponseEntity.ok(materialService.saveMaterial(material));
+        return ResponseEntity.ok(materialService.createMaterial(material));
     }
 
     // Delete material

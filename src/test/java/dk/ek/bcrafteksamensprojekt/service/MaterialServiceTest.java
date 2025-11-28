@@ -33,7 +33,7 @@ public class MaterialServiceTest {
         when(materialRepository.save(material)).thenReturn(savedMaterial);
 
         // Act
-        Material result = materialService.saveMaterial(material);
+        Material result = materialService.createMaterial(material);
 
         // Assert
         assertEquals(1L, result.getId());
