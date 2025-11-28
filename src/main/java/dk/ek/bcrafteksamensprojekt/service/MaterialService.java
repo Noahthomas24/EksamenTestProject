@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class MaterialService {
     private final MaterialRepository materialRepository;
 
-    public Material saveMaterial(Material material){
+    public Material createMaterial(Material material){
         return materialRepository.save(material);
     }
 
@@ -45,4 +45,5 @@ public class MaterialService {
                 orElseThrow(() -> new NotFoundException("Materiale ikke fundet med id "+id));
         materialRepository.delete(material);
     }
+
 }
