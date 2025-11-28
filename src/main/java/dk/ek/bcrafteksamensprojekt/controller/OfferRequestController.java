@@ -26,7 +26,6 @@ public class OfferRequestController {
     // Get single offer request
     @GetMapping("/{id}")
     public ResponseEntity<OfferRequest> getOfferRequestById(@PathVariable Long id) {
-        // TODO: e.g. public OfferRequest findOfferRequestById(Long id)
         return ResponseEntity.ok(offerRequestService.findOfferRequestById(id));
     }
 
