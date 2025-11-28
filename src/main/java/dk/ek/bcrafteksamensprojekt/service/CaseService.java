@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CaseService {
@@ -28,6 +26,7 @@ public class CaseService {
         c.setCustomer(customer);
         return caseRepository.save(c);
     }
+
 
     public Case updateCase(Long id, Case updated) {
         Case existing = caseRepository.findById(id)
@@ -66,7 +65,6 @@ public class CaseService {
 
         return caseRepository.save(c);
     }
-
 
     @Transactional
     public Case deleteMaterialFromCase(Long id, Long caseMaterialId){
