@@ -1,10 +1,10 @@
 package dk.ek.bcrafteksamensprojekt.controller;
 
-import dk.ek.bcrafteksamensprojekt.model.OfferRequest;
+import dk.ek.bcrafteksamensprojekt.dto.OfferRequest.OfferRequestRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.OfferRequest.OfferRequestResponseDTO;
 import dk.ek.bcrafteksamensprojekt.service.OfferRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,29 +17,28 @@ public class OfferRequestController {
 
     private final OfferRequestService offerRequestService;
 
-    // Get all offer requests
     @GetMapping
-    public ResponseEntity<List<OfferRequest>> getAllOfferRequests() {
-        return ResponseEntity.ok(offerRequestService.findAllOfferRequests());
+    public ResponseEntity<List<OfferRequestResponseDTO>> getAll() {
+        return ResponseEntity.ok(offerRequestService.getAll());
     }
 
-    // Get single offer request
     @GetMapping("/{id}")
-    public ResponseEntity<OfferRequest> getOfferRequestById(@PathVariable Long id) {
-        return ResponseEntity.ok(offerRequestService.findOfferRequestById(id));
+    public ResponseEntity<OfferRequestResponseDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(offerRequestService.getById(id));
     }
 
-    // Create offer request (called from contact form)
     @PostMapping
-    public ResponseEntity<OfferRequest> createOfferRequest(@RequestBody OfferRequest offerRequest) {
-        OfferRequest saved = offerRequestService.createOfferRequest(offerRequest);
+    public ResponseEntity<OfferRequestResponseDTO> create(
+            @RequestBody OfferRequestRequestDTO dto
+    ) {
+        OfferRequestResponseDTO saved = offerRequestService.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // Delete offer request
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOfferRequest(@PathVariable Long id) {
-        offerRequestService.deleteOfferRequest(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        offerRequestService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

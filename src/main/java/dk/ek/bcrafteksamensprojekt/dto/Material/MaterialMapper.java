@@ -1,4 +1,4 @@
-package dk.ek.bcrafteksamensprojekt.dto;
+package dk.ek.bcrafteksamensprojekt.dto.Material;
 
 import dk.ek.bcrafteksamensprojekt.model.Material;
 import org.springframework.stereotype.Component;

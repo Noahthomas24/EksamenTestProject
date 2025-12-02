@@ -1,5 +1,8 @@
 package dk.ek.bcrafteksamensprojekt.service;
 
+import dk.ek.bcrafteksamensprojekt.dto.OfferRequest.OfferRequestMapper;
+import dk.ek.bcrafteksamensprojekt.dto.OfferRequest.OfferRequestRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.OfferRequest.OfferRequestResponseDTO;
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
 import dk.ek.bcrafteksamensprojekt.model.OfferRequest;
 import dk.ek.bcrafteksamensprojekt.repository.OfferRequestRepository;
@@ -13,44 +16,30 @@ import java.util.List;
 public class OfferRequestService {
 
     private final OfferRequestRepository offerRequestRepository;
+    private final OfferRequestMapper offerRequestMapper;
 
-    // Create new offer request (used when form is submitted)
-    public OfferRequest createOfferRequest(OfferRequest offerRequest) {
-        return offerRequestRepository.save(offerRequest);
+    public OfferRequestResponseDTO create(OfferRequestRequestDTO dto) {
+        OfferRequest o = offerRequestMapper.toEntity(dto);
+        offerRequestRepository.save(o);
+        return offerRequestMapper.toDTO(o);
     }
 
-    // Update an existing offer request
-    public OfferRequest updateOfferRequest(Long id, OfferRequest updated) {
-        OfferRequest existing = offerRequestRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Tilbudsforespørgsel ikke fundet med id " + id));
-
-        existing.setFirstName(updated.getFirstName());
-        existing.setLastName(updated.getLastName());
-        existing.setPhoneNumber(updated.getPhoneNumber());
-        existing.setEmail(updated.getEmail());
-        existing.setDescription(updated.getDescription());
-
-        return offerRequestRepository.save(existing);
+    public OfferRequestResponseDTO getById(Long id) {
+        OfferRequest o = offerRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Offer request not found: " + id));
+        return offerRequestMapper.toDTO(o);
     }
 
-    // Find single offer request
-    public OfferRequest findOfferRequestById(Long id) {
-        return offerRequestRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Tilbudsforespørgsel ikke fundet med id " + id));
+    public List<OfferRequestResponseDTO> getAll() {
+        return offerRequestRepository.findAll().stream()
+                .map(offerRequestMapper::toDTO)
+                .toList();
     }
 
-    // Return all offer requests
-    public List<OfferRequest> findAllOfferRequests() {
-        return offerRequestRepository.findAll();
+    public void delete(Long id) {
+        OfferRequest o = offerRequestRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Offer request not found: " + id));
+        offerRequestRepository.delete(o);
     }
-
-    // Delete an offer request
-    public void deleteOfferRequest(Long id) {
-        OfferRequest existing = offerRequestRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Kan ikke finde tilbudsforespørgsel med id " + id));
-
-        offerRequestRepository.delete(existing);
-    }
-
-
 }
+

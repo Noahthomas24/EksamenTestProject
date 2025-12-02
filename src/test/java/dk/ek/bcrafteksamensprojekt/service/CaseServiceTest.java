@@ -176,6 +176,7 @@ public class CaseServiceTest {
         c.setId(caseId);
 
         CaseMaterial cm = new CaseMaterial();
+
         cm.setDescription("Oak plank 5m");
         cm.setQuantity(10);
 
@@ -183,7 +184,7 @@ public class CaseServiceTest {
         when(caseRepository.save(c)).thenReturn(c);
 
         // Act
-        Case result = caseService.addMaterialToCase(caseId, cm);
+        Case result = caseService.addMaterial(caseId, cm);
 
         // Assert
         // We can't see inside addCaseMaterial() easily, but we CAN verify save is called

@@ -1,5 +1,8 @@
 package dk.ek.bcrafteksamensprojekt.service;
 
+import dk.ek.bcrafteksamensprojekt.dto.Customer.CustomerMapper;
+import dk.ek.bcrafteksamensprojekt.dto.Customer.CustomerRequestDto;
+import dk.ek.bcrafteksamensprojekt.dto.Customer.CustomerResponseDto;
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
 import dk.ek.bcrafteksamensprojekt.model.Customer;
 import dk.ek.bcrafteksamensprojekt.repository.CustomerRepository;
@@ -13,32 +16,39 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public Customer createCustomer(Customer customer){
-        return customerRepository.save(customer);
+    public CustomerResponseDto createCustomer(CustomerRequestDto dto) {
+        Customer customer = customerMapper.toEntity(dto);
+        customerRepository.save(customer);
+        return customerMapper.toDto(customer);
     }
 
 
 
-    public Customer updateCustomer(Long id, Customer updated){
+    public CustomerResponseDto updateCustomer(Long id, CustomerRequestDto dto) {
         Customer existing = customerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Kunde ikke fundet med id "+id));
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + id));
 
-        existing.setFirstName(updated.getFirstName());
-        existing.setLastName(updated.getLastName());
-        existing.setPhoneNumber(updated.getPhoneNumber());
-        existing.setEmail(updated.getEmail());
-        existing.setAddress(updated.getAddress());
-        existing.setZipCode(updated.getZipCode());
-        existing.setCity(updated.getCity());
+        existing.setFirstName(dto.firstName());
+        existing.setLastName(dto.lastName());
+        existing.setEmail(dto.email());
+        existing.setPhoneNumber(dto.phoneNumber());
+        existing.setAddress(dto.address());
+        existing.setZipCode(dto.zipCode());
+        existing.setCity(dto.city());
 
-        return customerRepository.save(existing);
+        customerRepository.save(existing);
+
+        return customerMapper.toDto(existing);
     }
 
     // Returns custom NotFoundException
-    public Customer findCustomerById(Long id){
-        return customerRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Kunde ikke fundet med id "+id));
+    public CustomerResponseDto findById(Long id) {
+        Customer c = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + id));
+
+        return customerMapper.toDto(c);
     }
 
     // Filters customers to contain search criteria
@@ -48,13 +58,16 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public List<Customer> findAllCustomers(){
-        return customerRepository.findAll();
+    public List<CustomerResponseDto> findAllCustomers() {
+        return customerRepository.findAll().stream()
+                .map(customerMapper::toDto)
+                .toList();
     }
 
-    public void deleteCustomer(Long id){
-        Customer customer = customerRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Kan ikke finde kunde med id "+id));
-        customerRepository.deleteById(id);
-        }
+    public void deleteCustomer(Long id) {
+        Customer c = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + id));
+
+        customerRepository.delete(c);
     }
+}

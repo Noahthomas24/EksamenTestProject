@@ -1,4 +1,4 @@
-package dk.ek.bcrafteksamensprojekt.dto;
+package dk.ek.bcrafteksamensprojekt.dto.OfferRequest;
 
 import dk.ek.bcrafteksamensprojekt.model.OfferRequest;
 import dk.ek.bcrafteksamensprojekt.model.Type;

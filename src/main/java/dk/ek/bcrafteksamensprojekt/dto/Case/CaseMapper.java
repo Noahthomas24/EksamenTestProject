@@ -1,4 +1,4 @@
-package dk.ek.bcrafteksamensprojekt.dto;
+package dk.ek.bcrafteksamensprojekt.dto.Case;
 
 import dk.ek.bcrafteksamensprojekt.model.Case;
 import dk.ek.bcrafteksamensprojekt.model.CaseMaterial;

@@ -1,7 +1,8 @@
 package dk.ek.bcrafteksamensprojekt.controller;
 
-import dk.ek.bcrafteksamensprojekt.model.Case;
-import dk.ek.bcrafteksamensprojekt.model.CaseMaterial;
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseMaterialRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseResponseDTO;
 import dk.ek.bcrafteksamensprojekt.service.CaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,27 +20,30 @@ public class CaseController {
 
     // Get all cases
     @GetMapping
-    public ResponseEntity<List<Case>> getAllCases() {
+    public ResponseEntity<List<CaseResponseDTO>> getAllCases() {
         return ResponseEntity.ok(caseService.findAllCases());
     }
 
     // Get single case
     @GetMapping("/{id}")
-    public ResponseEntity<Case> getCaseById(@PathVariable Long id) {
-        return ResponseEntity.ok(caseService.findCaseById(id));
+    public ResponseEntity<CaseResponseDTO> getCaseById(@PathVariable Long id) {
+        return ResponseEntity.ok(caseService.getCaseById(id));
     }
 
-    // Create new case ( needs to converted to DTO in requestbody )
+    // Create new case
     @PostMapping
-    public ResponseEntity<Case> createCase(@RequestBody Case c, @RequestBody Long customerId) {
-        Case saved = caseService.createCase(customerId, c);
+    public ResponseEntity<CaseResponseDTO> createCase(@RequestBody CaseRequestDTO dto) {
+        CaseResponseDTO saved = caseService.createCase(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
     // Update existing case
     @PutMapping("/{id}")
-    public ResponseEntity<Case> updateCase(@PathVariable Long id, @RequestBody Case c) {
-        return ResponseEntity.ok(caseService.updateCase(id, c));
+    public ResponseEntity<CaseResponseDTO> updateCase(
+            @PathVariable Long id,
+            @RequestBody CaseRequestDTO dto
+    ) {
+        return ResponseEntity.ok(caseService.updateCase(id, dto));
     }
 
     // Delete case
@@ -49,24 +53,32 @@ public class CaseController {
         return ResponseEntity.noContent().build();
     }
 
-    // -- Methods for caseMaterials --
+    // ----------------- CaseMaterial endpoints -----------------
 
-    // Add material to case
     @PostMapping("/{id}/materials")
-    public ResponseEntity<Case> addMaterialToCase(@PathVariable Long id, @RequestBody CaseMaterial caseMaterial) {
-        return ResponseEntity.ok(caseService.addMaterialToCase(id, caseMaterial));
+    public ResponseEntity<CaseResponseDTO> addMaterial(
+            @PathVariable Long id,
+            @RequestBody CaseMaterialRequestDTO dto
+    ) {
+        return ResponseEntity.ok(caseService.addMaterial(id, dto));
     }
 
-    // Remove material from case
+    @PutMapping("/{id}/materials/{caseMaterialId}")
+    public ResponseEntity<CaseResponseDTO> updateMaterial(
+            @PathVariable Long id,
+            @PathVariable Long caseMaterialId,
+            @RequestBody CaseMaterialRequestDTO dto
+    ) {
+        return ResponseEntity.ok(caseService.updateMaterial(id, caseMaterialId, dto));
+    }
+
     @DeleteMapping("/{id}/materials/{caseMaterialId}")
-    public ResponseEntity<Void> removeMaterialFromCase(@PathVariable Long id, @PathVariable Long caseMaterialId) {
+    public ResponseEntity<Void> removeMaterial(
+            @PathVariable Long id,
+            @PathVariable Long caseMaterialId
+    ) {
+        caseService.deleteMaterialFromCase(id, caseMaterialId);
         return ResponseEntity.noContent().build();
     }
-
-    // Update material from case
-    @PutMapping("/{id}/materials/{caseMaterialId}")
-    public ResponseEntity<Case> updateMaterialOnCase(@PathVariable Long id, @PathVariable Long caseMaterialId,
-                                                     @RequestBody CaseMaterial caseMaterial){
-        return ResponseEntity.ok(caseService.updateMaterialOnCase(id, caseMaterialId, caseMaterial));
-    }
 }
+

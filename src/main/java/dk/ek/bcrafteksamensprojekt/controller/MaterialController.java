@@ -1,6 +1,7 @@
 package dk.ek.bcrafteksamensprojekt.controller;
 
-import dk.ek.bcrafteksamensprojekt.model.Material;
+import dk.ek.bcrafteksamensprojekt.dto.Material.MaterialRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.Material.MaterialResponseDTO;
 import dk.ek.bcrafteksamensprojekt.service.MaterialService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,42 +17,39 @@ public class MaterialController {
 
     private final MaterialService materialService;
 
-    // Get all materials
     @GetMapping
-    public ResponseEntity<List<Material>> getAllMaterials() {
-        return ResponseEntity.ok(materialService.findAllMaterials());
+    public ResponseEntity<List<MaterialResponseDTO>> getAll() {
+        return ResponseEntity.ok(materialService.getAllMaterials());
     }
 
-    // Get single material
     @GetMapping("/{id}")
-    public ResponseEntity<Material> getMaterialById(@PathVariable Long id) {
-        return ResponseEntity.ok(materialService.findMaterialById(id));
+    public ResponseEntity<MaterialResponseDTO> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(materialService.getById(id));
     }
 
-    // Search materials by name
     @GetMapping("/search")
-    public ResponseEntity<List<Material>> searchMaterialsByName(@RequestParam String name) {
-        return ResponseEntity.ok(materialService.findMaterialsByName(name));
+    public ResponseEntity<List<MaterialResponseDTO>> search(@RequestParam String name) {
+        return ResponseEntity.ok(materialService.searchByName(name));
     }
 
-    // Create material
     @PostMapping
-    public ResponseEntity<Material> createMaterial(@RequestBody Material material) {
-        Material saved = materialService.createMaterial(material);
+    public ResponseEntity<MaterialResponseDTO> create(@RequestBody MaterialRequestDTO dto) {
+        MaterialResponseDTO saved = materialService.createMaterial(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
-    // Update material
     @PutMapping("/{id}")
-    public ResponseEntity<Material> updateMaterial(@PathVariable Long id, @RequestBody Material material) {
-        material.setId(id);
-        return ResponseEntity.ok(materialService.createMaterial(material));
+    public ResponseEntity<MaterialResponseDTO> update(
+            @PathVariable Long id,
+            @RequestBody MaterialRequestDTO dto
+    ) {
+        return ResponseEntity.ok(materialService.updateMaterial(id, dto));
     }
 
-    // Delete material
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMaterial(@PathVariable Long id) {
-        materialService.deleteMaterialById(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        materialService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
+

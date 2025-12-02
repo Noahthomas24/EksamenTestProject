@@ -1,55 +1,65 @@
 package dk.ek.bcrafteksamensprojekt.service;
 
+import dk.ek.bcrafteksamensprojekt.dto.Material.MaterialMapper;
+import dk.ek.bcrafteksamensprojekt.dto.Material.MaterialRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.Material.MaterialResponseDTO;
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
-import dk.ek.bcrafteksamensprojekt.model.Case;
 import dk.ek.bcrafteksamensprojekt.model.Material;
 import dk.ek.bcrafteksamensprojekt.repository.MaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class MaterialService {
+
     private final MaterialRepository materialRepository;
+    private final MaterialMapper materialMapper;
 
-    public Material createMaterial(Material material){
-        return materialRepository.save(material);
+    public MaterialResponseDTO createMaterial(MaterialRequestDTO dto) {
+        Material m = materialMapper.toEntity(dto);
+        materialRepository.save(m);
+        return materialMapper.toDTO(m);
     }
 
-    public Material updateMaterial(Long id, Material updated){
-        Material existing = materialRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Materiale ikke fundet med id "+ id));
+    public MaterialResponseDTO updateMaterial(Long id, MaterialRequestDTO dto) {
+        Material m = materialRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Material not found: " + id));
 
-        existing.setName(updated.getName());
-        existing.setUnit(updated.getUnit());
-        existing.setPricePerUnit(updated.getPricePerUnit());
+        m.setName(dto.name());
+        m.setUnit(dto.unit());
+        m.setPricePerUnit(dto.pricePerUnit());
 
-        return materialRepository.save(existing);
+        materialRepository.save(m);
+        return materialMapper.toDTO(m);
     }
 
-    public Material findMaterialById(Long id){
-        return materialRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("Materiale ikke fundet med id "+ id));
+    public MaterialResponseDTO getById(Long id) {
+        Material m = materialRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Material not found: " + id));
+
+        return materialMapper.toDTO(m);
     }
 
-    public List<Material> findAllMaterials() {
-        return materialRepository.findAll();
+    public List<MaterialResponseDTO> getAllMaterials() {
+        return materialRepository.findAll().stream()
+                .map(materialMapper::toDTO)
+                .toList();
     }
 
-    public List<Material> findMaterialsByName(String name) {
-        return materialRepository.findAll().stream().
-                filter(m -> m.getName().contains(name))
-                .collect(Collectors.toList());
+    public List<MaterialResponseDTO> searchByName(String name) {
+        return materialRepository.findByNameContainingIgnoreCase(name).stream()
+                .map(materialMapper::toDTO)
+                .toList();
     }
 
+    public void delete(Long id) {
+        Material m = materialRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Material not found: " + id));
 
-    public void deleteMaterialById(Long id){
-        Material material = materialRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("Materiale ikke fundet med id "+id));
-        materialRepository.delete(material);
+        materialRepository.delete(m);
     }
-
 }
+

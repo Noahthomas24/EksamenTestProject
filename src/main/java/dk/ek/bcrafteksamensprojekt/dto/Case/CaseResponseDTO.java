@@ -1,4 +1,4 @@
-package dk.ek.bcrafteksamensprojekt.dto;
+package dk.ek.bcrafteksamensprojekt.dto.Case;
 
 import java.time.LocalDate;
 import java.util.List;

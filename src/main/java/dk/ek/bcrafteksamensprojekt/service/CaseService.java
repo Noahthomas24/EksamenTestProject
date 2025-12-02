@@ -1,10 +1,11 @@
 package dk.ek.bcrafteksamensprojekt.service;
 
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseMapper;
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseMaterialRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseRequestDTO;
+import dk.ek.bcrafteksamensprojekt.dto.Case.CaseResponseDTO;
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
-import dk.ek.bcrafteksamensprojekt.model.Case;
-import dk.ek.bcrafteksamensprojekt.model.CaseMaterial;
-import dk.ek.bcrafteksamensprojekt.model.Customer;
-import dk.ek.bcrafteksamensprojekt.model.OfferRequest;
+import dk.ek.bcrafteksamensprojekt.model.*;
 import dk.ek.bcrafteksamensprojekt.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,12 +20,19 @@ public class CaseService {
     private final CustomerRepository customerRepository;
     private final CaseMaterialRepository caseMaterialRepository;
     private final OfferRequestRepository offerRequestRepository;
+    private final MaterialRepository materialRepository;
+    private final CaseMapper caseMapper;
 
-    public Case createCase(Long customerId, Case c){
-        Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new NotFoundException("Kunde ikke fundet med id "+customerId));
-        c.setCustomer(customer);
-        return caseRepository.save(c);
+    public CaseResponseDTO createCase(CaseRequestDTO dto) {
+
+        Customer customer = customerRepository.findById(dto.customerId())
+                .orElseThrow(() -> new NotFoundException("Customer not found: " + dto.customerId()));
+
+        Case c = caseMapper.toEntity(dto, customer);
+
+        caseRepository.save(c);
+
+        return caseMapper.toResponseDTO(c);
     }
 
     public Case createCaseFromOfferRequest(Long offerRequestId) {
@@ -41,23 +49,30 @@ public class CaseService {
     }
 
 
-    public Case updateCase(Long id, Case updated) {
-        Case existing = caseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+    public CaseResponseDTO updateCase(Long id, CaseRequestDTO dto) {
 
-        existing.setTitle(updated.getTitle());
-        existing.setDescription(updated.getDescription());
+        Case c = caseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Case not found: " + id));
 
-        return caseRepository.save(existing);
+        c.setTitle(dto.title());
+        c.setDescription(dto.description());
+        c.setType(Type.fromString(dto.type()));
+
+        caseRepository.save(c);
+
+        return caseMapper.toResponseDTO(c);
     }
 
-    public List<Case> findAllCases() {
-        return caseRepository.findAll();
+    public List<CaseResponseDTO> findAllCases() {
+        return caseRepository.findAll().stream()
+                .map(caseMapper::toResponseDTO)
+                .toList();
     }
 
-    public Case findCaseById(Long id){
-        return caseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+    public CaseResponseDTO getCaseById(Long id) {
+        Case c = caseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Case not found: " + id));
+        return caseMapper.toResponseDTO(c);
     }
 
     public void deleteCase(Long id) {
@@ -70,13 +85,27 @@ public class CaseService {
     // @Transactional: Runs this method inside one database transaction so JPA can safely update Case and CaseMaterial together
     // If one of the DB queries fail, they are both rolled back, so one is not updated without the other
     @Transactional
-    public Case addMaterialToCase(Long id, CaseMaterial caseMaterial){
-        Case c = caseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+    public CaseResponseDTO addMaterial(Long caseId, CaseMaterialRequestDTO dto) {
 
-        c.addCaseMaterial(caseMaterial);
+        Case c = caseRepository.findById(caseId)
+                .orElseThrow(() -> new NotFoundException("Case not found: " + caseId));
 
-        return caseRepository.save(c);
+        Material m = materialRepository.findById(dto.materialId())
+                .orElseThrow(() -> new NotFoundException("Material not found: " + dto.materialId()));
+
+        CaseMaterial cm = new CaseMaterial();
+        cm.setDescription(dto.description());
+        cm.setQuantity(dto.quantity());
+        cm.setUnitPrice(dto.unitPrice());
+        cm.setMaterial(m);
+        cm.setC(c);
+
+        caseMaterialRepository.save(cm);
+
+        c.getCaseMaterials().add(cm);
+        caseRepository.save(c);
+
+        return caseMapper.toResponseDTO(c);
     }
 
     @Transactional
@@ -98,23 +127,20 @@ public class CaseService {
     }
 
     @Transactional
-    public Case updateMaterialOnCase(Long id, Long caseMaterialId, CaseMaterial updated){
-        Case c = caseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Sag ikke fundet med med id "+id));
+    public CaseResponseDTO updateMaterial(Long caseId, Long cmId, CaseMaterialRequestDTO dto) {
 
-        CaseMaterial existing = caseMaterialRepository.findById(caseMaterialId)
-                .orElseThrow(() -> new NotFoundException("Sagsmateriale ikke fundet med id "+caseMaterialId));
+        CaseMaterial cm = caseMaterialRepository.findById(cmId)
+                .orElseThrow(() -> new NotFoundException("CaseMaterial not found: " + cmId));
 
-        if (!existing.getC().getId().equals(id)) {
-            throw new NotFoundException("Sagsmateriale med id " + caseMaterialId +
-                    " tilhører ikke sag " + id);
-        }
+        cm.setDescription(dto.description());
+        cm.setQuantity(dto.quantity());
+        cm.setUnitPrice(dto.unitPrice());
 
-        existing.setDescription(updated.getDescription());
-        existing.setQuantity(updated.getQuantity());
-        existing.setUnitPrice(updated.getUnitPrice());
+        caseMaterialRepository.save(cm);
 
-        return caseRepository.save(c);
+        Case c = cm.getC();
+
+        return caseMapper.toResponseDTO(c);
     }
 
 }
