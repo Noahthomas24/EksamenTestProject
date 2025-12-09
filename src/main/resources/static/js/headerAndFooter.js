@@ -5,10 +5,12 @@ class AppHeader extends HTMLElement {
       <div class="logo">B-Craft</div>
         <nav>
             <a href="index.html">Forside</a>
-            <a href="ydelser.html">Ydelser</a>
-            <a href="portefolje.html">Portefølje</a>
+            <a href="services.html">Ydelser</a>
+            <a href="portfolio.html">Portefølje</a>
             <a href="aboutUs.html">Om os</a>
-            <a href="kontakt.html">Kontakt</a>
+            <a href="contact.html">Kontakt</a>
+            <a href="offer-request.html" class="btn">Få et tilbud</a>
+            
         </nav>
       </header>
     `;
@@ -25,12 +27,16 @@ class AppFooter extends HTMLElement {
   <div class="footerMainDiv">
       <div class="aboutUs-column">
         <h1 class="strong-footer">Kort om os</h1> 
-        <h3>
+        <p>
          
-        Mit navn er Benny Thomasen og jeg er en dedikeret bygningssnedker med base midt i Jylland. Mit fokus ligger på kreativitet, bæredygtighed og genanvendelse i alt, hvad jeg gør. Jeg tilbyder skræddersyede løsninger til mine kunder og er engageret i at facilitere undervisning og samskabelse med børn og unge.
-
-Med 5 år som B-craft, har jeg bygget lidt af hvert. Jeg stræber efter at skabe og montere unikke og funktionelle løsninger, der imødekommer dine behov. Mit fokus på kvalitet, pålidelighed og samarbejde gør mig til et naturligt valg for de fleste projekter for både private og erhverv/institutioner. 
-        </h3>
+        Mit navn er Benny Thomasen og jeg er en dedikeret bygningssnedker 
+        med base midt i Jylland. Mit fokus ligger på kreativitet, bæredygtighed og 
+        genanvendelse i alt, hvad jeg gør. Jeg tilbyder skræddersyede løsninger til mine 
+        kunder og er engageret i at facilitere undervisning og samskabelse med børn og unge.
+        Med 5 år som B-craft, har jeg bygget lidt af hvert. Jeg stræber efter at skabe og montere 
+        unikke og funktionelle løsninger, der imødekommer dine behov. Mit fokus på kvalitet, pålidelighed og 
+        samarbejde gør mig til et naturligt valg for de fleste projekter for både private og erhverv/institutioner. 
+        </p>
       </div>
     
       
@@ -66,10 +72,12 @@ Med 5 år som B-craft, har jeg bygget lidt af hvert. Jeg stræber efter at skabe
     
       <div class="contact-container">
       <div>
-        <h1> Kontakt mig </h1>
-        <h2> B-Craft </h2>
-        <h2> Tlf: +45 24 25 34 60 </h2>
-        <h2> E-mail: info@b-craft.dk </h2>  
+        <h1>Kontakt</h1>
+            B-Craft<br>
+            Skolegade 27, 7323 Give<br>
+            CVR: 27201903<br>
+            info@bcraft.dk<br>
+            Tlf: 24 25 34 60
         </div>
       </div>
       
