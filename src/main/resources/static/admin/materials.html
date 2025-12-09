@@ -9,6 +9,7 @@
 
 <div class="admin-layout">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <h2 class="logo">B-Craft</h2>
         <nav>
@@ -20,13 +21,45 @@
         </nav>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="content">
+
         <header class="topbar">
             <h1>Materialer</h1>
+
+            <div class="actions">
+                <input type="text" id="searchInput" placeholder="Søg efter materialer..." />
+                <button id="newMaterialBtn">+ Nyt materiale</button>
+            </div>
         </header>
-        <section id="materialsList"></section>
+
+        <section id="materialList"></section>
+
     </main>
 
+</div>
+
+<!-- ⭐ MODAL: OPRET/REDIGÉR MATERIALE -->
+<div id="materialModal" class="modal hidden">
+    <div class="modal-content">
+
+        <h2 id="modalTitle">Opret materiale</h2>
+
+        <label>Navn</label>
+        <input id="materialName" type="text">
+
+        <label>Pris</label>
+        <input id="materialPrice" type="number" step="0.01">
+
+        <label>Enhed (fx m, m2, stk)</label>
+        <input id="materialUnit" type="text">
+
+        <div class="modal-actions">
+            <button id="saveMaterialBtn">Gem</button>
+            <button id="closeModalBtn" class="secondary">Luk</button>
+        </div>
+
+    </div>
 </div>
 
 <script src="/js/admin-materials.js"></script>

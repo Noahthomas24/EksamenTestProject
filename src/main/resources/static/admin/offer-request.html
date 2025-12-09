@@ -2,7 +2,7 @@
 <html lang="da">
 <head>
     <meta charset="UTF-8" />
-    <title>Kunder – Admin</title>
+    <title>Tilbudsforespørgsler – Admin</title>
     <link rel="stylesheet" href="../css/admin.css" />
 </head>
 <body>
@@ -14,36 +14,33 @@
         <h2 class="logo">B-Craft</h2>
         <nav>
             <a href="dashboard.html">Dashboard</a>
-            <a href="customers.html" class="active">Kunder</a>
+            <a href="customers.html">Kunder</a>
             <a href="cases.html">Sager</a>
             <a href="materials.html">Materialer</a>
+            <a href="offer-requests.html" class="active">Forespørgsler</a>
             <a href="../index.html" class="logout">Til hjemmesiden →</a>
         </nav>
     </aside>
 
-    <!-- CONTENT -->
+    <!-- MAIN CONTENT -->
     <main class="content">
-
         <header class="topbar">
-            <h1>Kunder</h1>
+            <h1>Tilbudsforespørgsler</h1>
 
             <div class="actions">
-                <input type="text" id="searchInput" placeholder="Søg efter kunder..." />
-                <button id="newCustomerBtn">+ Ny kunde</button>
+                <input type="text" id="searchInput" placeholder="Søg i forespørgsler...">
             </div>
         </header>
 
-        <section id="customerList"></section>
-
+        <section id="offerList"></section>
     </main>
-
 </div>
 
-<!-- ⭐ MODAL: OPRET/REDIGÉR KUNDE -->
-<div id="customerModal" class="modal hidden">
+<!-- ⭐ MODAL TIL REDIGERING -->
+<div id="offerModal" class="modal hidden">
     <div class="modal-content">
 
-        <h2 id="modalTitle">Opret kunde</h2>
+        <h2 id="modalTitle">Redigér forespørgsel</h2>
 
         <label>Fornavn</label>
         <input id="firstName" type="text">
@@ -51,28 +48,29 @@
         <label>Efternavn</label>
         <input id="lastName" type="text">
 
-        <label>Email</label>
-        <input id="email" type="email">
-
         <label>Telefon</label>
         <input id="phone" type="text">
 
-        <label>Adresse</label>
-        <input id="address" type="text">
+        <label>Email</label>
+        <input id="email" type="email">
 
-        <label>Postnummer</label>
-        <input id="zipcode" type="text">
+        <label>Beskrivelse</label>
+        <textarea id="description"></textarea>
 
-        <label>By</label>
-        <input id="city" type="text">
+        <label>Type</label>
+        <select id="type">
+            <option value="WOODCRAFT">Træarbejde</option>
+            <option value="FURNITURE">Møbler</option>
+            <option value="SPECIAL">Specialopgave</option>
+        </select>
 
         <div class="modal-actions">
-            <button id="saveCustomerBtn">Gem</button>
+            <button id="saveOfferBtn">Gem</button>
             <button id="closeModalBtn" class="secondary">Luk</button>
         </div>
     </div>
 </div>
 
-<script src="/js/admin-customers.js"></script>
+<script src="/js/admin-offer-requests.js"></script>
 </body>
 </html>

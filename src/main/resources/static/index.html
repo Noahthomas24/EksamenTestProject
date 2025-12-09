@@ -11,30 +11,100 @@
 
 <body>
 
+<!-- HEADER -->
+<header>
+    <div class="logo">B-Craft</div>
+    <nav>
+        <a href="index.html" class="active">Forside</a>
+        <a href="ydelser.html">Ydelser</a>
+        <a href="portefolje.html">Portefølje</a>
+        <a href="om-os.html">Om os</a>
+        <a href="kontakt.html">Kontakt</a>
+        <a href="offer-request.html" class="btn">Få et tilbud</a>
+    </nav>
+</header>
 
-
-<section class="hero">
+<!-- HERO -->
+<section class="hero" id="hero">
     <div class="hero-text">
         <h1>Skræddersyet træarbejde</h1>
-        <p>Alt fra specialmøbler til renovering – håndværk i topklasse.</p>
-        <a href="kontakt.html" class="btn">Kontakt os</a>
+        <p>Specialmøbler, renovering og unikke løsninger i kvalitetstræ.</p>
+        <a href="offer-request.html" class="btn" id="heroCtaBtn">Få et gratis tilbud</a>
+    </div>
+
+    <!-- Slider arrows -->
+    <button class="slider-btn left" id="heroPrevBtn">&#10094;</button>
+    <button class="slider-btn right" id="heroNextBtn">&#10095;</button>
+</section>
+
+<!-- SERVICES -->
+<section class="projects reveal">
+    <h2>Vores ydelser</h2>
+
+    <div class="grid">
+        <div class="project-card" style="padding: 20px; text-align:center;">
+            <h3>Specialbyggede møbler</h3>
+            <p>Designet efter dine ønsker og mål.</p>
+        </div>
+
+        <div class="project-card" style="padding: 20px; text-align:center;">
+            <h3>Snedkerarbejde</h3>
+            <p>Renovering, reparation og forbedringer.</p>
+        </div>
+
+        <div class="project-card" style="padding: 20px; text-align:center;">
+            <h3>Specialopgaver</h3>
+            <p>Har du en idé? Vi bygger den.</p>
+        </div>
     </div>
 </section>
 
-<section class="projects">
+<!-- PORTFOLIO PREVIEW -->
+<section class="projects reveal">
     <h2>Udvalgte projekter</h2>
+
     <div class="grid">
         <div class="project-card"></div>
         <div class="project-card"></div>
         <div class="project-card"></div>
     </div>
+
+    <div style="text-align:center; margin-top: 25px;">
+        <a href="portefolje.html" class="btn">Se alle projekter</a>
+    </div>
 </section>
 
+<!-- CTA -->
+<section class="projects reveal" style="text-align:center;">
+    <h2>Klar til at komme i gang?</h2>
+    <p>Kontakt os i dag og lad os skabe noget unikt sammen.</p>
+</section>
 
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div>
+            <h3>B-Craft</h3>
+            <p>Eksperter i skræddersyet træarbejde og specialløsninger.</p>
+        </div>
 
-<app-footer></app-footer>
+        <div>
+            <h3>Socials</h3>
+            <p>Facebook<br>Instagram</p>
+        </div>
 
-<script src="/js/headerAndFooter.js"></script>
+        <div>
+            <h3>Kontakt</h3>
+            Navn<br>
+            Adressevej 12, 7100 Vejle<br>
+            CVR: 12345678<br>
+            info@bcraft.dk<br>
+            12 34 56 78
+        </div>
+    </div>
+</footer>
+
+<script src="js/index.js"></script>
 
 </body>
 </html>
