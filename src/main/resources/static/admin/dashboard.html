@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <title>Dashboard – Admin</title>
-    <link rel="stylesheet" href="../css/admin.css" >
+    <link rel="stylesheet" href="../css/admin.css" />
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -16,25 +19,66 @@
             <a href="customers.html">Kunder</a>
             <a href="cases.html">Sager</a>
             <a href="materials.html">Materialer</a>
+            <a href="offer-requests.html">Forespørgsler</a>
             <a href="../index.html" class="logout">Til hjemmesiden →</a>
         </nav>
     </aside>
 
     <main class="content">
+
         <header class="topbar">
             <h1>Dashboard</h1>
         </header>
 
+        <!-- ⭐ Statistik -->
         <section class="stats">
-            <div class="stat-card" id="customersCount">Kunder: ...</div>
-            <div class="stat-card" id="casesCount">Sager: ...</div>
-            <div class="stat-card" id="materialsCount">Materialer: ...</div>
+            <div class="stat-card">
+                <h3>Kunder</h3>
+                <p id="customerCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Åbne sager</h3>
+                <p id="openCasesCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Lukkede sager</h3>
+                <p id="closedCasesCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Materialer</h3>
+                <p id="materialCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Forespørgsler</h3>
+                <p id="offerCount">0</p>
+            </div>
         </section>
 
-        <section class="latest">
-            <h2>Seneste sager</h2>
-            <div id="latestCases" class="latest-container"></div>
+        <!-- ⭐ Grafer -->
+        <section class="charts">
+            <div class="chart-card">
+                <h2>Sagsstatus</h2>
+                <canvas id="caseStatusChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h2>Fordeling af tilbudstyper</h2>
+                <canvas id="offerTypeChart"></canvas>
+            </div>
         </section>
+
+        <!-- ⭐ Seneste aktivitet -->
+        <section class="activity">
+            <div class="activity-card">
+                <h2>Seneste aktivitet</h2>
+                <ul id="activityLog"></ul>
+            </div>
+        </section>
+
     </main>
 
 </div>

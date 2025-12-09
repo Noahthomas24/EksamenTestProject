@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8" />
+    <title>Få et tilbud – B-Craft</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header">
+    <h1>Få et tilbud</h1>
+    <p>Udfyld formularen nedenfor, så vender vi tilbage hurtigst muligt.</p>
+</header>
+
+<main class="offer-form-wrapper">
+
+    <form id="offerForm" class="offer-form">
+
+        <div class="form-group">
+            <label>Fornavn</label>
+            <input type="text" id="firstName" required>
+        </div>
+
+        <div class="form-group">
+            <label>Efternavn</label>
+            <input type="text" id="lastName" required>
+        </div>
+
+        <div class="form-group">
+            <label>Telefon</label>
+            <input type="text" id="phone" required>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+            <label>Beskrivelse af opgaven</label>
+            <textarea id="description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Type af opgave</label>
+            <select id="type">
+                <option value="WOODCRAFT">Træarbejde</option>
+                <option value="FURNITURE">Møbler</option>
+                <option value="SPECIAL">Specialopgave</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Send forespørgsel</button>
+
+    </form>
+
+    <!-- Succes besked -->
+    <div id="successMessage" class="success-message hidden">
+        <h2>Tak for din forespørgsel!</h2>
+        <p>Vi vender tilbage til dig hurtigst muligt.</p>
+    </div>
+
+</main>
+
+<script src="js/offer-request.js"></script>
+</body>
+</html>

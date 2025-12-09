@@ -9,6 +9,7 @@
 
 <div class="admin-layout">
 
+    <!-- SIDEBAR -->
     <aside class="sidebar">
         <h2 class="logo">B-Craft</h2>
         <nav>
@@ -20,14 +21,61 @@
         </nav>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="content">
+
         <header class="topbar">
             <h1>Sager</h1>
-        </header>
-        <section id="caseList"></section>
-    </main>
 
+            <div class="actions">
+                <input type="text" id="searchInput" placeholder="Søg efter sager..." />
+
+                <!-- ⭐ STATUS FILTER -->
+                <select id="statusFilter">
+                    <option value="ALL">Alle</option>
+                    <option value="OPEN">Åbne</option>
+                    <option value="CLOSED">Lukkede</option>
+                </select>
+
+                <button id="newCaseBtn">+ Ny sag</button>
+            </div>
+        </header>
+
+        <section id="caseList"></section>
+
+    </main>
 </div>
+
+<!-- ⭐ MODAL: OPRET/REDIGÉR SAG -->
+<div id="caseModal" class="modal hidden">
+    <div class="modal-content">
+
+        <h2 id="modalTitle">Opret sag</h2>
+
+        <label>Titel</label>
+        <input id="caseTitle" type="text">
+
+        <label>Beskrivelse</label>
+        <textarea id="caseDescription"></textarea>
+
+        <!-- ⭐ KUNDER DROPDOWN -->
+        <label>Kunde</label>
+        <select id="caseCustomerSelect"></select>
+
+        <!-- ⭐ MATERIALER -->
+        <label>Materialer</label>
+        <div id="materialsContainer"></div>
+
+        <button id="addMaterialBtn">+ Tilføj materiale</button>
+
+        <div class="modal-actions">
+            <button id="saveCaseBtn">Gem</button>
+            <button id="closeModalBtn" class="secondary">Luk</button>
+        </div>
+
+    </div>
+</div>
+
 
 <script src="/js/admin-cases.js"></script>
 </body>

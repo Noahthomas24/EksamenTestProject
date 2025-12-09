@@ -205,3 +205,88 @@ form input:focus, form textarea:focus {
         font-size: 32px;
     }
 }
+.offer-form-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.offer-form .form-group {
+    margin-bottom: 16px;
+}
+
+.offer-form input,
+.offer-form textarea,
+.offer-form select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.offer-form textarea {
+    height: 120px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #333;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background: #555;
+}
+
+.success-message {
+    text-align: center;
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 36px;
+    background: rgba(0,0,0,0.4);
+    border: none;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s ease;
+}
+
+.slider-btn:hover {
+    background: rgba(0,0,0,0.7);
+}
+
+.slider-btn.left {
+    left: 20px;
+}
+
+.slider-btn.right {
+    right: 20px;
+}
+
+/* Reveal animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: 0.8s ease;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
