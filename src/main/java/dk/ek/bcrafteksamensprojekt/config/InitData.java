@@ -54,10 +54,6 @@ public class InitData implements CommandLineRunner {
         userAuthenticationService.register(
                 new UserRequestDTO("demo", "demo", "demo", "demo")
         );
-
-        userAuthenticationService.register(
-                new UserRequestDTO("demo", "demo", "demo", "demo")
-        );
     }
 
     // --------------------------------------------------------
