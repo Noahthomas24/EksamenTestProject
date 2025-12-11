@@ -79,6 +79,46 @@ function addMaterialRow(existingMaterial = null) {
 document.getElementById("addMaterialBtn").onclick = () => addMaterialRow();
 
 // -------------------------------------------------
+// FILE UPLOAD FOR CASE
+// -------------------------------------------------
+
+function triggerUpload(caseId) {
+    const fileInput = document.getElementById("hiddenFileInput");
+
+    // When the file is selected
+    fileInput.onchange = async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch(`/api/cases/${caseId}/files`, {
+                method: "POST",
+                credentials: "include",
+                body: formData
+            });
+
+            if (!res.ok) {
+                alert("Kunne ikke uploade filen.");
+                return;
+            }
+
+            alert("Filen blev uploadet!");
+        } catch (err) {
+            alert("Der skete en fejl under upload.");
+            console.error(err);
+        }
+
+        fileInput.value = ""; // reset for next upload
+    };
+
+    fileInput.click(); // open picker
+}
+
+
+// -------------------------------------------------
 // FILTRERING
 // -------------------------------------------------
 function applyFilters() {
@@ -124,6 +164,8 @@ function renderCases(cases) {
                     ${s.status === "OPEN" ? "Luk sag" : "Genåbn sag"}
                 </button>
                 <button class="danger" onclick="deleteCase(${s.id})">Slet</button>
+                <!-- ⭐ NEW: Upload button -->
+                <button onclick="triggerUpload(${s.id})">Upload dokument</button>
             </div>
         `;
 
