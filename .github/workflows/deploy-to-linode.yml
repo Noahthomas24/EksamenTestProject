@@ -1,5 +1,4 @@
 name: deploy-to-linode.yml
-
 on:
   push:
     branches: [ main ]
@@ -9,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@3df4f47a4ce1c78542c4f35ae6c405c4ea4e4f36
+      - uses: actions/checkout@0ad4b8f20ce3c260fa8ba256d3b9d9c25aaf2a64
 
       - name: Set up Maven
-        uses: s4u/setup-maven-action@f792ada9f31b4f4e5db7f091adbe21c3f305a2f0
+        uses: s4u/setup-maven-action@6e0c0e9637cc54a68a392d37899f859e8eab3a50
         with:
           java-version: '21'
 
@@ -30,7 +29,7 @@ jobs:
           strip_components: 1
 
       - name: Restart Service
-        uses: appleboy/ssh-action@f26e029bba904a68f69a4f9c2c280c706ad4ad4a
+        uses: appleboy/ssh-action@fe6d8a38d6bf8cc8fb47864e4edf4bb43dd5b6c0
         with:
           host: ${{ secrets.LINODE_IP }}
           username: root
