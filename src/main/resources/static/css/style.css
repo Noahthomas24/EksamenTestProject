@@ -52,7 +52,8 @@ nav a:hover {
    HERO SECTION
 ================================*/
 .hero {
-    height: 450px;
+    height: 50vh;
+    width: 100%;
     background: url('../img/hero.jpg') center/cover no-repeat;
     display: flex;
     justify-content: center;
@@ -60,6 +61,7 @@ nav a:hover {
     text-align: center;
     padding: 20px;
     position: relative;
+    overflow: hidden;
 }
 
 .hero::after {
@@ -71,8 +73,9 @@ nav a:hover {
 
 .hero-text {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .hero-text h1 {
@@ -125,6 +128,9 @@ nav a:hover {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     transition: 0.3s ease;
+    background-size: cover;      /* Scales image to fill the card completely */
+    background-position: center; /* Centers the image (instead of showing top-left corner) */
+    background-repeat: no-repeat; /* Prevents tiling */
 }
 
 .project-card:hover {
