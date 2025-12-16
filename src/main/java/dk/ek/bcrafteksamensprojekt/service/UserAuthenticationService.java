@@ -3,6 +3,7 @@ package dk.ek.bcrafteksamensprojekt.service;
 import dk.ek.bcrafteksamensprojekt.dto.Users.UserMapper;
 import dk.ek.bcrafteksamensprojekt.dto.Users.UserRequestDTO;
 import dk.ek.bcrafteksamensprojekt.dto.Users.UserResponseDTO;
+import dk.ek.bcrafteksamensprojekt.exceptions.AlreadyExistsException;
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
 import dk.ek.bcrafteksamensprojekt.model.User;
 import dk.ek.bcrafteksamensprojekt.repository.UserRepository;
@@ -21,6 +22,10 @@ public class UserAuthenticationService {
 
     // --- Register new user ---
     public UserResponseDTO register(UserRequestDTO dto) {
+        if (userRepository.existsByUsername(dto.username())){
+            throw new AlreadyExistsException("Der findes allerede en bruger med dette brugernavn");
+        }
+
         User user = userMapper.toEntity(dto);
 
         // Hash password before saving
