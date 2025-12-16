@@ -31,6 +31,9 @@ public class Case {
     private List<CaseMaterial> caseMaterials = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Enumerated(EnumType.STRING)
     private Type type;
     public Case(Long id, String title, String description, LocalDate createdAt, Customer customer, List<CaseMaterial> caseMaterials) {
         this.id = id;

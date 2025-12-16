@@ -1,6 +1,8 @@
 let allCustomers = [];
 let editingCustomerId = null;
 
+const modal = document.getElementById("customerModal");
+
 // -------------------------------------------------
 // HENT KUNDER
 // -------------------------------------------------
@@ -44,9 +46,9 @@ function renderCustomers(customers) {
         div.innerHTML = `
             <h3>${c.firstName} ${c.lastName}</h3>
             <p><strong>Email:</strong> ${c.email}</p>
-            <p><strong>Tlf:</strong> ${c.phone}</p>
+            <p><strong>Tlf:</strong> ${c.phoneNumber ?? "-"}</p>
             <p><strong>Adresse:</strong> ${c.address}</p>
-            <p><strong>${c.zipcode} ${c.city}</strong></p>
+            <p><strong>${c.zipCode} ${c.city}</strong></p>
 
             <div class="card-actions">
                 <button onclick="openEditCustomer(${c.id})">Redigér</button>
@@ -91,10 +93,10 @@ async function openEditCustomer(id) {
     document.getElementById("firstName").value = c.firstName;
     document.getElementById("lastName").value = c.lastName;
     document.getElementById("email").value = c.email;
-    document.getElementById("phone").value = c.phone;
+    document.getElementById("phone").value = c.phoneNumber ?? "";
     document.getElementById("address").value = c.address;
-    document.getElementById("zipcode").value = c.zipcode;
-    document.getElementById("city").value = c.city;
+    document.getElementById("zipcode").value = c.zipCode ?? "";
+    document.getElementById("city").value = c.city ?? "";
 
     modal.classList.remove("hidden");
 }
@@ -104,32 +106,27 @@ async function openEditCustomer(id) {
 // -------------------------------------------------
 document.getElementById("saveCustomerBtn").onclick = async () => {
     const customerObj = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        address: document.getElementById("address").value,
-        zipcode: document.getElementById("zipcode").value,
-        city: document.getElementById("city").value
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phoneNumber: document.getElementById("phone").value.trim(),
+        address: document.getElementById("address").value.trim(),
+        zipCode: document.getElementById("zipcode").value.trim(),
+        city: document.getElementById("city").value.trim()
     };
 
-    if (editingCustomerId === null) {
-        // OPRET
-        await fetch("/api/customers", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(customerObj)
-        });
-    } else {
-        // REDIGÉR
-        await fetch(`/api/customers/${editingCustomerId}`, {
-            method: "PUT",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(customerObj)
-        });
-    }
+    const url = editingCustomerId === null
+        ? "/api/customers"
+        : `/api/customers/${editingCustomerId}`;
+
+    const method = editingCustomerId === null ? "POST" : "PUT";
+
+    await fetch(url, {
+        method,
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(customerObj)
+    });
 
     modal.classList.add("hidden");
     loadCustomers();
@@ -150,9 +147,8 @@ async function deleteCustomer(id) {
 }
 
 // -------------------------------------------------
-// MODAL KNAP
+// MODAL LUK
 // -------------------------------------------------
-const modal = document.getElementById("customerModal");
 document.getElementById("closeModalBtn").onclick = () => {
     modal.classList.add("hidden");
 };

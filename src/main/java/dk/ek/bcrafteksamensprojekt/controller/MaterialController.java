@@ -34,6 +34,7 @@ public class MaterialController {
 
     @PostMapping
     public ResponseEntity<MaterialResponseDTO> create(@RequestBody MaterialRequestDTO dto) {
+        System.out.println("DTO RECEIVED = " + dto);
         MaterialResponseDTO saved = materialService.createMaterial(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }

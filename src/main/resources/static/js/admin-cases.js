@@ -3,6 +3,8 @@ let allCustomers = [];
 let allMaterials = [];
 let editingCaseId = null;
 
+const modal = document.getElementById("caseModal");
+
 // -------------------------------------------------
 // HENT DATA
 // -------------------------------------------------
@@ -21,6 +23,9 @@ async function loadInitialData() {
     applyFilters();
 }
 
+// -------------------------------------------------
+// KUNDER DROPDOWN
+// -------------------------------------------------
 function populateCustomerDropdown() {
     const dropdown = document.getElementById("caseCustomerSelect");
     dropdown.innerHTML = "";
@@ -127,9 +132,9 @@ function applyFilters() {
 
     let filtered = allCases;
 
-    if (search.length > 0) {
+    if (search) {
         filtered = filtered.filter(c =>
-            c.caseName.toLowerCase().includes(search) ||
+            c.title.toLowerCase().includes(search) ||
             c.description.toLowerCase().includes(search)
         );
     }
@@ -142,30 +147,59 @@ function applyFilters() {
 }
 
 // -------------------------------------------------
-// RENDER
+// RENDER SAGER (MED MATERIALER)
 // -------------------------------------------------
 function renderCases(cases) {
     const list = document.getElementById("caseList");
     list.innerHTML = "";
 
-    cases.forEach(s => {
+    cases.forEach(c => {
+        let materialsHtml = "<em>Ingen materialer</em>";
+
+        if (c.materials && c.materials.length > 0) {
+            materialsHtml = "<ul class='case-materials'>";
+
+            c.materials.forEach(cm => {
+                const material = allMaterials.find(
+                    m => m.id === cm.materialId
+                );
+
+                const name = material ? material.name : "Ukendt materiale";
+                const unitPrice = cm.effectiveUnitPrice ?? 0;
+                const total = unitPrice * cm.quantity;
+
+                materialsHtml += `
+                    <li>
+                        ${name} – ${cm.quantity} stk
+                        (${unitPrice} kr/stk · ${total} kr i alt)
+                    </li>
+                `;
+            });
+
+            materialsHtml += "</ul>";
+        }
+
         const div = document.createElement("div");
         div.className = "card";
 
         div.innerHTML = `
-            <h3>${s.caseName}</h3>
-            <p>${s.description}</p>
-            <p><strong>Kunde:</strong> ${s.customer?.firstName || ""} ${s.customer?.lastName || ""}</p>
-            <p><strong>Status:</strong> ${s.status}</p>
+            <h3>${c.title}</h3>
+            <p>${c.description}</p>
+            <p><strong>Status:</strong> ${c.status}</p>
+
+            <div class="case-materials-wrapper">
+                <strong>Materialer:</strong>
+                ${materialsHtml}
+            </div>
 
             <div class="card-actions">
-                <button onclick="openEditCase(${s.id})">Redigér</button>
-                <button onclick="toggleCaseStatus(${s.id}, '${s.status}')">
-                    ${s.status === "OPEN" ? "Luk sag" : "Genåbn sag"}
+                <button onclick="openEditCase(${c.id})">Redigér</button>
+                <button onclick="toggleCaseStatus(${c.id}, '${c.status}')">
+                    ${c.status === "OPEN" ? "Luk sag" : "Genåbn sag"}
                 </button>
-                <button class="danger" onclick="deleteCase(${s.id})">Slet</button>
+                <button class="danger" onclick="deleteCase(${c.id})">Slet</button>
                 <!-- ⭐ NEW: Upload button -->
-                <button onclick="triggerUpload(${s.id})">Upload dokument</button>
+                <button onclick="triggerUpload(${c.id})">Upload dokument</button>
             </div>
         `;
 
@@ -174,59 +208,69 @@ function renderCases(cases) {
 }
 
 // -------------------------------------------------
-// ÅBEN/LUK SAG
+// MATERIALER – RÆKKE MED PRIS
 // -------------------------------------------------
-async function toggleCaseStatus(id, currentStatus) {
-    const newStatus = currentStatus === "OPEN" ? "CLOSED" : "OPEN";
+function addMaterialRow(existingMaterial = null) {
+    const row = document.createElement("div");
+    row.className = "material-row";
 
-    await fetch(`/api/cases/${id}/status`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus })
+    const materialSelect = document.createElement("select");
+    materialSelect.className = "material-id";
+
+    allMaterials.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = m.name;
+        materialSelect.appendChild(opt);
     });
 
-    loadInitialData();
-}
+    const amountInput = document.createElement("input");
+    amountInput.type = "number";
+    amountInput.placeholder = "Mængde";
+    amountInput.className = "material-amount";
 
-// -------------------------------------------------
-// SLET SAG
-// -------------------------------------------------
-async function deleteCase(id) {
-    if (!confirm("Vil du slette sagen?")) return;
+    const priceInfo = document.createElement("div");
+    priceInfo.className = "material-price";
+    priceInfo.textContent = "Pris: –";
 
-    await fetch(`/api/cases/${id}`, {
-        method: "DELETE",
-        credentials: "include"
-    });
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "X";
+    removeBtn.className = "secondary";
+    removeBtn.onclick = () => row.remove();
 
-    loadInitialData();
-}
+    function updatePrice() {
+        const material = allMaterials.find(
+            m => m.id === Number(materialSelect.value)
+        );
+        const qty = Number(amountInput.value || 0);
 
-// -------------------------------------------------
-// OPRET / REDIGER SAG
-// -------------------------------------------------
-async function openEditCase(id) {
-    editingCaseId = id;
+        if (!material || material.pricePerUnit == null || qty <= 0) {
+            priceInfo.textContent = "Pris: –";
+            return;
+        }
 
-    const res = await fetch(`/api/cases/${id}`, { credentials: "include" });
-    const s = await res.json();
+        const total = material.pricePerUnit * qty;
+        priceInfo.textContent =
+            `Pris: ${material.pricePerUnit} kr • I alt: ${total} kr`;
+    }
 
-    document.getElementById("modalTitle").textContent = "Redigér sag";
+    materialSelect.onchange = updatePrice;
+    amountInput.oninput = updatePrice;
 
-    document.getElementById("caseTitle").value = s.caseName;
-    document.getElementById("caseDescription").value = s.description;
-    document.getElementById("caseCustomerSelect").value = s.customerId;
+    if (existingMaterial) {
+        materialSelect.value = existingMaterial.materialId;
+        amountInput.value = existingMaterial.quantity;
+        updatePrice();
+    }
 
-    const matContainer = document.getElementById("materialsContainer");
-    matContainer.innerHTML = "";
+    row.append(
+        materialSelect,
+        amountInput,
+        priceInfo,
+        removeBtn
+    );
 
-    s.materials.forEach(m => addMaterialRow({
-        materialId: m.materialId,
-        quantity: m.amount
-    }));
-
-    modal.classList.remove("hidden");
+    document.getElementById("materialsContainer").appendChild(row);
 }
 
 // -------------------------------------------------
@@ -238,48 +282,80 @@ document.getElementById("newCaseBtn").onclick = () => {
     document.getElementById("modalTitle").textContent = "Opret sag";
     document.getElementById("caseTitle").value = "";
     document.getElementById("caseDescription").value = "";
-    document.getElementById("caseCustomerSelect").value = allCustomers[0]?.id || "";
-
     document.getElementById("materialsContainer").innerHTML = "";
 
     modal.classList.remove("hidden");
 };
 
 // -------------------------------------------------
-// GEM SAG (PUT eller POST)
+// REDIGÉR SAG
+// -------------------------------------------------
+async function openEditCase(id) {
+    editingCaseId = id;
+
+    const res = await fetch(`/api/cases/${id}`, { credentials: "include" });
+    const c = await res.json();
+
+    document.getElementById("modalTitle").textContent = "Redigér sag";
+    document.getElementById("caseTitle").value = c.title;
+    document.getElementById("caseDescription").value = c.description;
+    document.getElementById("caseCustomerSelect").value = c.customerId;
+
+    const container = document.getElementById("materialsContainer");
+    container.innerHTML = "";
+
+    c.materials.forEach(m => addMaterialRow(m));
+
+    modal.classList.remove("hidden");
+}
+
+// -------------------------------------------------
+// GEM SAG (type = "Snedker")
 // -------------------------------------------------
 document.getElementById("saveCaseBtn").onclick = async () => {
     const materials = [];
 
     document.querySelectorAll(".material-row").forEach(row => {
+        const materialId = Number(row.querySelector(".material-id").value);
+        const qtyValue = row.querySelector(".material-amount").value;
+        const quantity = Number(qtyValue);
+
+        if (!materialId || !qtyValue || quantity <= 0) return;
+
         materials.push({
-            materialId: Number(row.querySelector(".material-id").value),
-            quantity: Number(row.querySelector(".material-amount").value)
+            materialId,
+            quantity,
+            description: "",
+            unitPrice: 0
         });
     });
 
     const body = {
-        caseName: document.getElementById("caseTitle").value,
-        description: document.getElementById("caseDescription").value,
+        title: document.getElementById("caseTitle").value.trim(),
+        description: document.getElementById("caseDescription").value.trim(),
         customerId: Number(document.getElementById("caseCustomerSelect").value),
-        type: "WOODCRAFT",
-        materials: materials
+        type: "Snedker",
+        materials
     };
 
-    if (editingCaseId === null) {
-        await fetch("/api/cases", {
-            method: "POST",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
-        });
-    } else {
-        await fetch(`/api/cases/${editingCaseId}`, {
-            method: "PUT",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body)
-        });
+    const url = editingCaseId === null
+        ? "/api/cases"
+        : `/api/cases/${editingCaseId}`;
+
+    const method = editingCaseId === null ? "POST" : "PUT";
+
+    const res = await fetch(url, {
+        method,
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+        const err = await res.text();
+        console.error("SAVE CASE ERROR:", err);
+        alert("Kunne ikke gemme sag – tjek felterne");
+        return;
     }
 
     modal.classList.add("hidden");
@@ -287,15 +363,26 @@ document.getElementById("saveCaseBtn").onclick = async () => {
 };
 
 // -------------------------------------------------
-// MODAL CLOSE
+// STATUS / SLET
 // -------------------------------------------------
-document.getElementById("closeModalBtn").onclick = () => {
-    modal.classList.add("hidden");
-};
+async function toggleCaseStatus(id, status) {
+
+    const currentStatus = status === "CLOSED" ? "CLOSED" : "OPEN";
+    const newStatus = currentStatus === "OPEN" ? "CLOSED" : "OPEN";
+
+    await fetch(`/api/cases/${id}/status?status=${newStatus}`, {
+        method: "PUT",
+        credentials: "include"
+    });
+
+    loadInitialData();
+}
 
 // -------------------------------------------------
 // EVENTS
 // -------------------------------------------------
+document.getElementById("addMaterialBtn").onclick = () => addMaterialRow();
+document.getElementById("closeModalBtn").onclick = () => modal.classList.add("hidden");
 document.getElementById("searchInput").oninput = applyFilters;
 document.getElementById("statusFilter").onchange = applyFilters;
 

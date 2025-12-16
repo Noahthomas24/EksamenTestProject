@@ -12,13 +12,19 @@
 
 <div class="admin-layout">
 
+    <!-- ⭐ LOADING OVERLAY -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>Indlæser dashboard...</p>
+    </div>
+
     <aside class="sidebar">
         <h2 class="logo">B-Craft</h2>
         <nav>
-            <a href="dashboard.html" class="active">Dashboard</a>
-            <a href="customers.html">Kunder</a>
-            <a href="cases.html">Sager</a>
-            <a href="materials.html">Materialer</a>
+            <a href="dashboard" class="active">Dashboard</a>
+            <a href="customers">Kunder</a>
+            <a href="cases">Sager</a>
+            <a href="materials">Materialer</a>
             <a href="offer-requests.html">Forespørgsler</a>
             <a href="../index.html" class="logout">Til hjemmesiden →</a>
         </nav>
@@ -83,6 +89,6 @@
 
 </div>
 
-<script src="/js/admin-dashboard.js"></script>
+<script src="../js/admin-dashboard.js"></script>
 </body>
 </html>

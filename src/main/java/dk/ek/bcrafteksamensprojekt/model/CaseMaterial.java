@@ -26,7 +26,7 @@ public class CaseMaterial {
 
     // This is made so the user can overwrite the materials price (if they want to give discount)
     public Double getEffectiveUnitPrice() {
-        if (unitPrice != null) {
+        if (unitPrice != null && unitPrice > 0) {
             return unitPrice;
         }
 

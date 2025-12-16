@@ -1,44 +1,67 @@
 let caseStatusChart;
 let offerTypeChart;
 
+document.addEventListener("DOMContentLoaded", () => {
+    loadDashboard();
+});
+
+function showLoading() {
+    document.getElementById("loadingOverlay").classList.remove("hidden");
+}
+
+function hideLoading() {
+    document.getElementById("loadingOverlay").classList.add("hidden");
+}
+
+// ------------------------------------------------------
 // MAIN LOAD FUNCTION
+// ------------------------------------------------------
 async function loadDashboard() {
-    const [custRes, caseRes, matRes, offerRes] = await Promise.all([
-        fetch("/api/customers", { credentials: "include" }),
-        fetch("/api/cases", { credentials: "include" }),
-        fetch("/api/materials", { credentials: "include" }),
-        fetch("/api/offer-requests", { credentials: "include" })
-    ]);
+    showLoading();
 
-    const customers = await custRes.json();
-    const cases = await caseRes.json();
-    const materials = await matRes.json();
-    const offers = await offerRes.json();
+    try {
+        const [custRes, caseRes, matRes, offerRes] = await Promise.all([
+            fetch("/api/customers", { credentials: "include" }),
+            fetch("/api/cases", { credentials: "include" }),
+            fetch("/api/materials", { credentials: "include" }),
+            fetch("/api/offer-requests", { credentials: "include" })
+        ]);
 
-    // 🟦 Statistik
-    document.getElementById("customerCount").textContent = customers.length;
-    document.getElementById("materialCount").textContent = materials.length;
-    document.getElementById("offerCount").textContent = offers.length;
+        const customers = await custRes.json();
+        const cases = await caseRes.json();
+        const materials = await matRes.json();
+        const offers = await offerRes.json();
 
-    const openCases = cases.filter(c => c.status === "OPEN").length;
-    const closedCases = cases.filter(c => c.status === "CLOSED").length;
+        // 🟦 Statistik
+        document.getElementById("customerCount").textContent = customers.length;
+        document.getElementById("materialCount").textContent = materials.length;
+        document.getElementById("offerCount").textContent = offers.length;
 
-    document.getElementById("openCasesCount").textContent = openCases;
-    document.getElementById("closedCasesCount").textContent = closedCases;
+        const openCases = cases.filter(c => c.status === "OPEN").length;
+        const closedCases = cases.filter(c => c.status === "CLOSED").length;
 
-    // 🟩 Grafer
-    renderCaseChart(openCases, closedCases);
-    renderOfferTypeChart(offers);
+        document.getElementById("openCasesCount").textContent = openCases;
+        document.getElementById("closedCasesCount").textContent = closedCases;
 
-    // 🟧 Aktivitet
-    renderActivityLog(cases, offers);
+        // 🟩 Grafer
+        renderCaseChart(openCases, closedCases);
+        renderOfferTypeChart(offers);
+
+        // 🟧 Aktivitet
+        renderActivityLog(cases, offers);
+
+    } catch (err) {
+        console.error("Dashboard fejl:", err);
+        alert("Kunne ikke indlæse dashboard-data");
+    } finally {
+        hideLoading();
+    }
 }
 
 // ------------------------------------------------------
 // ⭐ GRAF: Sagsstatus
 // ------------------------------------------------------
 function renderCaseChart(openCount, closedCount) {
-
     if (caseStatusChart) caseStatusChart.destroy();
 
     const ctx = document.getElementById("caseStatusChart");
@@ -51,7 +74,12 @@ function renderCaseChart(openCount, closedCount) {
                 backgroundColor: ["#4CAF50", "#F44336"]
             }]
         },
-        options: { responsive: true }
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: "bottom" }
+            }
+        }
     });
 }
 
@@ -59,23 +87,26 @@ function renderCaseChart(openCount, closedCount) {
 // ⭐ GRAF: Fordeling af tilbudstyper
 // ------------------------------------------------------
 function renderOfferTypeChart(offers) {
-
     if (offerTypeChart) offerTypeChart.destroy();
 
     const typeCounts = {
-        WOODCRAFT: 0,
-        FURNITURE: 0,
-        SPECIAL: 0
+        Snedker: 0,
+        Møbler: 0,
+        Specielopgave: 0
     };
 
-    offers.forEach(o => typeCounts[o.type]++);
+    offers.forEach(o => {
+        if (typeCounts[o.type] !== undefined) {
+            typeCounts[o.type]++;
+        }
+    });
 
     const ctx = document.getElementById("offerTypeChart");
 
     offerTypeChart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["Træarbejde", "Møbler", "Specialopgave"],
+            labels: ["Snedker", "Møbler", "Specialopgave"],
             datasets: [{
                 data: [
                     typeCounts.WOODCRAFT,
@@ -87,7 +118,9 @@ function renderOfferTypeChart(offers) {
         },
         options: {
             responsive: true,
-            scales: { y: { beginAtZero: true } }
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
     });
 }
@@ -101,31 +134,26 @@ function renderActivityLog(cases, offers) {
 
     const activities = [];
 
-    // Tilføj cases
     cases.slice(-5).forEach(c => {
         activities.push({
-            text: `Ny sag: ${c.caseName} (${c.status})`,
+            text: `Sag: ${c.title} (${c.status})`,
             when: c.id
         });
     });
 
-    // Tilføj offers
     offers.slice(-5).forEach(o => {
         activities.push({
-            text: `Ny forespørgsel fra ${o.firstName} ${o.lastName}`,
+            text: `Forespørgsel fra ${o.firstName} ${o.lastName}`,
             when: o.id + 10000
         });
     });
 
-    // Sortér nyeste først
-    activities.sort((a, b) => b.when - a.when);
-
-    // Vis de 8 nyeste
-    activities.slice(0, 8).forEach(a => {
-        const li = document.createElement("li");
-        li.textContent = a.text;
-        log.appendChild(li);
-    });
+    activities
+        .sort((a, b) => b.when - a.when)
+        .slice(0, 8)
+        .forEach(a => {
+            const li = document.createElement("li");
+            li.textContent = a.text;
+            log.appendChild(li);
+        });
 }
-
-loadDashboard();

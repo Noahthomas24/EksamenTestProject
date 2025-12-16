@@ -3,6 +3,7 @@ package dk.ek.bcrafteksamensprojekt.controller;
 import dk.ek.bcrafteksamensprojekt.dto.Case.CaseMaterialRequestDTO;
 import dk.ek.bcrafteksamensprojekt.dto.Case.CaseRequestDTO;
 import dk.ek.bcrafteksamensprojekt.dto.Case.CaseResponseDTO;
+import dk.ek.bcrafteksamensprojekt.model.Status;
 import dk.ek.bcrafteksamensprojekt.service.CaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -79,6 +80,13 @@ public class CaseController {
     ) {
         caseService.deleteMaterialFromCase(id, caseMaterialId);
         return ResponseEntity.noContent().build();
+    }
+    @PutMapping("/{id}/status")
+    public ResponseEntity<CaseResponseDTO> updateCaseStatus(
+            @PathVariable Long id,
+            @RequestParam Status status
+    ) {
+        return ResponseEntity.ok(caseService.updateCaseStatus(id, status));
     }
 }
 

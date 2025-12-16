@@ -42,7 +42,7 @@ function renderMaterials(materials) {
 
         div.innerHTML = `
             <h3>${m.name}</h3>
-            <p><strong>Pris:</strong> ${m.price} kr</p>
+            <p><strong>Pris:</strong> ${m.pricePerUnit} kr</p>
             <p><strong>Enhed:</strong> ${m.unit}</p>
 
             <div class="card-actions">
@@ -82,7 +82,7 @@ async function openEditMaterial(id) {
     document.getElementById("modalTitle").textContent = "Redigér materiale";
 
     document.getElementById("materialName").value = m.name;
-    document.getElementById("materialPrice").value = m.price;
+    document.getElementById("materialPrice").value = m.pricePerUnit;
     document.getElementById("materialUnit").value = m.unit;
 
     modal.classList.remove("hidden");
@@ -95,7 +95,7 @@ document.getElementById("saveMaterialBtn").onclick = async () => {
 
     const materialObj = {
         name: document.getElementById("materialName").value,
-        price: Number(document.getElementById("materialPrice").value),
+        pricePerUnit: Number(document.getElementById("materialPrice").value),
         unit: document.getElementById("materialUnit").value
     };
 

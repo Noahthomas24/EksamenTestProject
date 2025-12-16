@@ -7,16 +7,19 @@
 </head>
 <body>
 
+<!-- =========================
+     ADMIN LAYOUT
+========================= -->
 <div class="admin-layout">
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <h2 class="logo">B-Craft</h2>
         <nav>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="customers.html">Kunder</a>
-            <a href="cases.html" class="active">Sager</a>
-            <a href="materials.html">Materialer</a>
+            <a href="dashboard">Dashboard</a>
+            <a href="customers">Kunder</a>
+            <a href="cases" class="active">Sager</a>
+            <a href="materials">Materialer</a>
             <a href="../index.html" class="logout">Til hjemmesiden →</a>
         </nav>
     </aside>
@@ -28,9 +31,13 @@
             <h1>Sager</h1>
 
             <div class="actions">
-                <input type="text" id="searchInput" placeholder="Søg efter sager..." />
+                <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Søg efter sager..."
+                />
 
-                <!-- ⭐ STATUS FILTER -->
+                <!-- STATUS FILTER -->
                 <select id="statusFilter">
                     <option value="ALL">Alle</option>
                     <option value="OPEN">Åbne</option>
@@ -46,31 +53,37 @@
     </main>
 </div>
 
-<!-- ⭐ MODAL: OPRET/REDIGÉR SAG -->
+<!-- =========================
+     MODAL (SKAL LIGGE HER)
+========================= -->
 <div id="caseModal" class="modal hidden">
     <div class="modal-content">
 
         <h2 id="modalTitle">Opret sag</h2>
 
-        <label>Titel</label>
-        <input id="caseTitle" type="text">
+        <label for="caseTitle">Titel</label>
+        <input id="caseTitle" type="text" />
 
-        <label>Beskrivelse</label>
+        <label for="caseDescription">Beskrivelse</label>
         <textarea id="caseDescription"></textarea>
 
-        <!-- ⭐ KUNDER DROPDOWN -->
-        <label>Kunde</label>
+        <!-- KUNDER -->
+        <label for="caseCustomerSelect">Kunde</label>
         <select id="caseCustomerSelect"></select>
 
-        <!-- ⭐ MATERIALER -->
+        <!-- MATERIALER -->
         <label>Materialer</label>
         <div id="materialsContainer"></div>
 
-        <button id="addMaterialBtn">+ Tilføj materiale</button>
+        <button id="addMaterialBtn" type="button">
+            + Tilføj materiale
+        </button>
 
         <div class="modal-actions">
-            <button id="saveCaseBtn">Gem</button>
-            <button id="closeModalBtn" class="secondary">Luk</button>
+            <button id="saveCaseBtn" type="button">Gem</button>
+            <button id="closeModalBtn" type="button" class="secondary">
+                Luk
+            </button>
         </div>
 
     </div>
