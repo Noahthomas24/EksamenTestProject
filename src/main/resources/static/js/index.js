@@ -2,41 +2,46 @@
 
 const hero = document.getElementById("hero");
 
-const heroImages = [
-    "images/hero1.jpg",
-    "images/hero2.jpg",
-    "images/hero3.jpg"
-];
 
-let heroIndex = 0;
 
-// Update hero background
-function updateHero() {
-    hero.style.backgroundImage = `url('${heroImages[heroIndex]}')`;
-    hero.style.transition = "background-image 1s ease-in-out";
-}
 
-// Next slide
-function nextHero() {
-    heroIndex = (heroIndex + 1) % heroImages.length;
-    updateHero();
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('.close');
+    const cards = document.querySelectorAll('.zoomable');
 
-// Previous slide
-function prevHero() {
-    heroIndex = (heroIndex - 1 + heroImages.length) % heroImages.length;
-    updateHero();
-}
+    // Åbn lightbox
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Vi henter stien direkte fra vores nye data-img attribut
+            const imgUrl = card.getAttribute('data-img');
 
-// Auto-slide every 5 seconds
-setInterval(nextHero, 5000);
+            if (imgUrl) {
+                console.log("Åbner billede:", imgUrl); // Tjek konsollen (F12) hvis det driller
+                lightboxImg.src = imgUrl;
+                lightbox.style.display = 'flex';
+            } else {
+                console.log("Fejl: Dette kort mangler en data-img attribut!");
+            }
+        });
+    });
 
-// Click arrows
-document.getElementById("heroNextBtn").addEventListener("click", nextHero);
-document.getElementById("heroPrevBtn").addEventListener("click", prevHero);
+    // Luk funktion
+    function closeLightbox() {
+        lightbox.style.display = 'none';
+        lightboxImg.src = '';
+    }
 
-// Init first image
-updateHero();
+    closeBtn.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightbox();
+        }
+    });
+});
+
 
 
 // PARALLAX EFFECT
