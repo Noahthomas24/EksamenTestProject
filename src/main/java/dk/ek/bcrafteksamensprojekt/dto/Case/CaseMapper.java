@@ -1,9 +1,6 @@
 package dk.ek.bcrafteksamensprojekt.dto.Case;
 
-import dk.ek.bcrafteksamensprojekt.model.Case;
-import dk.ek.bcrafteksamensprojekt.model.CaseMaterial;
-import dk.ek.bcrafteksamensprojekt.model.Customer;
-import dk.ek.bcrafteksamensprojekt.model.Type;
+import dk.ek.bcrafteksamensprojekt.model.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -45,6 +42,17 @@ public class CaseMapper {
                 cm.getUnitPrice(),
                 cm.getEffectiveUnitPrice(),
                 cm.getMaterial().getId()
+        );
+    }
+
+    public CaseFileResponseDTO toCaseFileResponseDTO(CaseFile file) {
+        return new CaseFileResponseDTO(
+                file.getId(),
+                file.getFilename(),
+                file.getOriginalFilename(),
+                file.getFileType(),
+                file.getFileSize(),
+                file.getUploadedAt()
         );
     }
 }

@@ -1,0 +1,38 @@
+name: deploy-to-linode.yml
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@0ad4b8f20ce3c260fa8ba256d3b9d9c25aaf2a64
+
+      - name: Set up Maven
+        uses: s4u/setup-maven-action@6e0c0e9637cc54a68a392d37899f859e8eab3a50
+        with:
+          java-version: '21'
+
+      - name: Build JAR
+        run: mvn clean package -DskipTests
+
+      - name: Copy JAR to Linode
+        uses: appleboy/scp-action@c26be5b9698014cc933a9351a092d49b4beba47f
+        with:
+          host: ${{ secrets.LINODE_IP }}
+          username: springapp
+          key: ${{ secrets.LINODE_SSH_KEY }}
+          source: "target/*.jar"
+          target: "/opt/springapp/app.jar"
+          strip_components: 1
+
+      - name: Restart Service
+        uses: appleboy/ssh-action@fe6d8a38d6bf8cc8fb47864e4edf4bb43dd5b6c0
+        with:
+          host: ${{ secrets.LINODE_IP }}
+          username: root
+          key: ${{ secrets.LINODE_SSH_KEY }}
+          script: |
+            systemctl restart springapp

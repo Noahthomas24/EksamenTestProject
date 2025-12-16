@@ -53,7 +53,7 @@ nav a:hover {
 ================================*/
 .hero {
     height: 450px;
-    background: url('../images/hero.jpg') center/cover no-repeat;
+    background: url('../img/hero.jpg') center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -151,19 +151,7 @@ footer {
 /* ===============================
    KONTAKT SIDE
 ================================*/
-.contact-container {
-    padding: 50px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
-}
 
-.contact-container form {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
 
 form input, form textarea {
     width: 100%;

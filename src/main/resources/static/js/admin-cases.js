@@ -39,6 +39,91 @@ function populateCustomerDropdown() {
 }
 
 // -------------------------------------------------
+// MATERIAL DROPDOWN ROW
+// -------------------------------------------------
+function addMaterialRow(existingMaterial = null) {
+    const row = document.createElement("div");
+    row.className = "material-row";
+
+    // Dropdown
+    const materialSelect = document.createElement("select");
+    materialSelect.className = "material-id";
+
+    allMaterials.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = m.name;
+        materialSelect.appendChild(opt);
+    });
+
+    if (existingMaterial) {
+        materialSelect.value = existingMaterial.materialId;
+    }
+
+    // Mængde input
+    const amountInput = document.createElement("input");
+    amountInput.type = "number";
+    amountInput.placeholder = "Mængde";
+    amountInput.className = "material-amount";
+    amountInput.value = existingMaterial?.quantity ?? "";
+
+    // Fjern-knap
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "secondary";
+    removeBtn.textContent = "X";
+    removeBtn.onclick = () => row.remove();
+
+    row.appendChild(materialSelect);
+    row.appendChild(amountInput);
+    row.appendChild(removeBtn);
+
+    document.getElementById("materialsContainer").appendChild(row);
+}
+
+// knap: tilføj materiale
+document.getElementById("addMaterialBtn").onclick = () => addMaterialRow();
+
+// -------------------------------------------------
+// FILE UPLOAD FOR CASE
+// -------------------------------------------------
+
+function triggerUpload(caseId) {
+    const fileInput = document.getElementById("hiddenFileInput");
+
+    // When the file is selected
+    fileInput.onchange = async () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        try {
+            const res = await fetch(`/api/cases/${caseId}/files`, {
+                method: "POST",
+                credentials: "include",
+                body: formData
+            });
+
+            if (!res.ok) {
+                alert("Kunne ikke uploade filen.");
+                return;
+            }
+
+            alert("Filen blev uploadet!");
+        } catch (err) {
+            alert("Der skete en fejl under upload.");
+            console.error(err);
+        }
+
+        fileInput.value = ""; // reset for next upload
+    };
+
+    fileInput.click(); // open picker
+}
+
+
+// -------------------------------------------------
 // FILTRERING
 // -------------------------------------------------
 function applyFilters() {
@@ -113,6 +198,8 @@ function renderCases(cases) {
                     ${c.status === "OPEN" ? "Luk sag" : "Genåbn sag"}
                 </button>
                 <button class="danger" onclick="deleteCase(${c.id})">Slet</button>
+                <!-- ⭐ NEW: Upload button -->
+                <button onclick="triggerUpload(${c.id})">Upload dokument</button>
             </div>
         `;
 
