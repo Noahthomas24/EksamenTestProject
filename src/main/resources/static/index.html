@@ -5,21 +5,24 @@
     <title>Forside – B-Craft</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="/css/header-footer.css">
+    <link rel="stylesheet" href="css/index.css">
 
 </head>
 <app-header></app-header>
 <body>
 <!-- HERO -->
 <section class="hero" id="hero">
+    <div class="video-container">
+        <video autoplay muted playsinline loop class="bg-video">
+            <source src="/img/Bcraft2.mp4" type="video/mp4">
+        </video>
+    </div>
     <div class="hero-text">
         <h1>Skræddersyet træarbejde</h1>
         <p>Specialmøbler, renovering og unikke løsninger i kvalitetstræ.</p>
         <a href="offer-request.html" class="btn" id="heroCtaBtn">Få et gratis tilbud</a>
     </div>
 
-    <!-- Slider arrows -->
-    <button class="slider-btn left" id="heroPrevBtn">&#10094;</button>
-    <button class="slider-btn right" id="heroNextBtn">&#10095;</button>
 </section>
 
 <!-- SERVICES -->
@@ -27,19 +30,33 @@
     <h2>Vores ydelser</h2>
 
     <div class="grid">
-        <div class="project-card" style="padding: 20px; text-align:center;">
-            <h3>Specialbyggede møbler</h3>
-            <p>Designet efter dine ønsker og mål.</p>
+        <div class="project-card zoomable"
+             data-img="/img/træbænk.jpg"
+             style="padding: 20px; text-align:center; background-image: url('/img/træbænk.jpg');">
+            <div class="text-container">
+                <h3>Specialbyggede møbler</h3>
+                <p>Designet efter dine ønsker og mål.</p>
+            </div>
         </div>
 
-        <div class="project-card" style="padding: 20px; text-align:center;">
-            <h3>Snedkerarbejde</h3>
-            <p>Renovering, reparation og forbedringer.</p>
+        <div class="project-card zoomable"
+             data-img="/img/KøkkenRenovering.jpg"
+             style="padding: 20px; text-align:center; background-image: url('/img/KøkkenRenovering.jpg');">
+            <div class="text-container">
+
+                <h3>Snedkerarbejde</h3>
+                <p>Renovering, reparation og forbedringer.</p>
+            </div>
+
         </div>
 
-        <div class="project-card" style="padding: 20px; text-align:center;">
-            <h3>Specialopgaver</h3>
-            <p>Har du en idé? Vi bygger den.</p>
+        <div class="project-card zoomable"
+             data-img="/img/Drivhus.jpg"
+             style="padding: 20px; text-align:center; background-image: url('/img/Drivhus.jpg');">
+            <div class="text-container">
+                <h3>Specialopgaver</h3>
+                <p>Har du en idé? Vi bygger den.</p>
+            </div>
         </div>
     </div>
 </section>
@@ -49,13 +66,23 @@
     <h2>Udvalgte projekter</h2>
 
     <div class="grid">
-        <div class="project-card"></div>
-        <div class="project-card"></div>
-        <div class="project-card"></div>
+        <div class="project-card zoomable"
+             data-img="/img/Potteplante.jpg"
+             style="padding: 20px; text-align:center; background-image: url('/img/Potteplante.jpg');"></div>
+
+        <div class="project-card zoomable"
+             data-img="/img/BadRenovering.jpg"
+             style="padding: 20px; text-align:center; background-image: url('/img/BadRenovering.jpg');"> </div>
+
+        <div class="project-card zoomable"
+             data-img="/img/Skraldespand.jpg"
+             style="padding: 20px; text-align:center; background-image: url('/img/Skraldespand.jpg');"> </div>
+
+
     </div>
 
     <div style="text-align:center; margin-top: 25px;">
-        <a href="portefolje.html" class="btn">Se alle projekter</a>
+        <a href="portfolio.html" class="btn">Se alle projekter</a>
     </div>
 </section>
 
@@ -66,7 +93,15 @@
 </section>
 
 
+<div id="lightbox" class="lightbox">
+    <span class="close">&times;</span>
+    <img class="lightbox-content" id="lightbox-img">
+</div>
+
+
+
 <app-footer></app-footer>
+
 
 <script src="js/headerAndFooter.js"></script>
 
