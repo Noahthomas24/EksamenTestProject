@@ -44,6 +44,12 @@ public class UserAuthenticationController {
                     .body(new LoginResponseDTO("Invalid credentials", null, null));
         }
 
+        // Invalidate old session
+        HttpSession oldSession = request.getSession(false);
+        if (oldSession != null) {
+            oldSession.invalidate();
+        }
+
         // Create session
         HttpSession session = request.getSession(true);
         session.setAttribute("user", new User(user.getId(), user.getUsername()));

@@ -7,6 +7,8 @@ import dk.ek.bcrafteksamensprojekt.exceptions.AlreadyExistsException;
 import dk.ek.bcrafteksamensprojekt.exceptions.NotFoundException;
 import dk.ek.bcrafteksamensprojekt.model.User;
 import dk.ek.bcrafteksamensprojekt.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -52,5 +54,15 @@ public class UserAuthenticationService {
                 .orElseThrow(() -> new NotFoundException("User not found: " + id));
 
         return userMapper.toDto(u);
+    }
+
+    public boolean validateLogin(HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            return false;
+        }
+
+        return session.getAttribute("user") != null;
     }
 }

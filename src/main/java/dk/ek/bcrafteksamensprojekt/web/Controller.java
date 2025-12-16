@@ -1,9 +1,14 @@
 package dk.ek.bcrafteksamensprojekt.web;
 
+import dk.ek.bcrafteksamensprojekt.service.UserAuthenticationService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @org.springframework.stereotype.Controller
 public class Controller {
+    @Autowired
+    UserAuthenticationService userAuthenticationService;
 
     @GetMapping("/")
     public String homePage(){
@@ -26,22 +31,34 @@ public class Controller {
     }
 
     @GetMapping("/cases")
-    public String casesPage(){
+    public String casesPage(HttpServletRequest request){
+        if (!userAuthenticationService.validateLogin(request)){
+            return "redirect:/login";
+        }
         return "forward:/admin/cases.html";
     }
 
     @GetMapping("/customers")
-    public String customersPage(){
+    public String customersPage(HttpServletRequest request){
+        if (!userAuthenticationService.validateLogin(request)){
+            return "redirect:/login";
+        }
         return "forward:/admin/customers.html";
     }
 
     @GetMapping("/dashboard")
-    public String dashboardPage(){
+    public String dashboardPage(HttpServletRequest request){
+        if (!userAuthenticationService.validateLogin(request)){
+            return "redirect:/login";
+        }
         return "forward:/admin/dashboard.html";
     }
 
     @GetMapping("/materials")
-    public String materialsPage(){
+    public String materialsPage(HttpServletRequest request){
+        if (!userAuthenticationService.validateLogin(request)){
+            return "redirect:/login";
+        }
         return "forward:/admin/materials.html";
     }
 }
