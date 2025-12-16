@@ -46,4 +46,4 @@ jobs:
           request_pty: true
           script: |
             sudo systemctl restart springapp
-            sudo systemctl status springapp --no-pager
+            sudo systemctl is-active springapp
