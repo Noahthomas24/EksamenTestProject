@@ -45,5 +45,7 @@ jobs:
           key: ${{ secrets.LINODE_SSH_KEY }}
           request_pty: true
           script: |
+            set -e
             sudo systemctl restart springapp
-            sudo systemctl is-active springapp
+            sudo systemctl is-active --quiet springapp
+            echo "Spring app is running"
