@@ -18,23 +18,25 @@ public class OfferRequest {
     private String lastName;
     private String phoneNumber;
     private String email;
+    private String zipcode;
 
     @Enumerated(EnumType.STRING)
     private Type type;
 
     private String description;
 
-    public OfferRequest(Long id, String firstName, String lastName, String phoneNumber, String email, String description) {
+    public OfferRequest(Long id, String firstName, String lastName, String phoneNumber, String email, String zipcode, String description) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.zipcode = zipcode;
         this.description = description;
     }
 
     public OfferRequest(){}
 
-    public OfferRequest(String martin, String due, String number, String mail, String s) {
+    public OfferRequest(String martin, String due, String number, String mail, String address, String s) {
     }
 }

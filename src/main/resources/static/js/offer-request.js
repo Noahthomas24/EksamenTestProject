@@ -4,8 +4,9 @@ document.getElementById("offerForm").addEventListener("submit", async (e) => {
     const offer = {
         firstName: document.getElementById("firstName").value,
         lastName: document.getElementById("lastName").value,
-        phone: document.getElementById("phone").value,
+        phoneNumber: document.getElementById("phone").value,
         email: document.getElementById("email").value,
+        zipcode: document.getElementById("zipcode").value,
         description: document.getElementById("description").value,
         type: document.getElementById("type").value
     };

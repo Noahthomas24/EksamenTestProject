@@ -378,3 +378,29 @@ button.danger:hover {
 .material-row button:hover {
     background: #cfcfcf;
 }
+/* ===== GRAFER ===== */
+.charts {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.chart-card {
+    padding: 1.5rem;
+    border-radius: 10px;
+    width: 360px;        /* 👈 styr bredden */
+    height: 360px;       /* 👈 styr højden */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chart-card h2 {
+    margin-bottom: 1rem;
+}
+
+.chart-card canvas {
+    width: 100% !important;
+    height: 100% !important;
+}

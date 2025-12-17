@@ -12,6 +12,7 @@ public class OfferRequestMapper {
         o.setFirstName(dto.firstName());
         o.setLastName(dto.lastName());
         o.setEmail(dto.email());
+        o.setZipcode(dto.zipcode());
         o.setPhoneNumber(dto.phoneNumber());
         o.setDescription(dto.description());
         o.setType(dto.type());
@@ -26,6 +27,7 @@ public class OfferRequestMapper {
                 e.getLastName(),
                 e.getPhoneNumber(),
                 e.getEmail(),
+                e.getZipcode(),
                 e.getDescription(),
                 e.getType()
         );

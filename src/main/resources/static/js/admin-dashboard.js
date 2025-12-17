@@ -109,9 +109,9 @@ function renderOfferTypeChart(offers) {
             labels: ["Snedker", "Møbler", "Specialopgave"],
             datasets: [{
                 data: [
-                    typeCounts.WOODCRAFT,
-                    typeCounts.FURNITURE,
-                    typeCounts.SPECIAL
+                    typeCounts.Snedker,
+                    typeCounts.Møbler,
+                    typeCounts.Specielopgave
                 ],
                 backgroundColor: ["#2196F3", "#FFC107", "#9C27B0"]
             }]

@@ -19,7 +19,8 @@ function applyFilters() {
     const filtered = allCustomers.filter(c =>
         c.firstName.toLowerCase().includes(search) ||
         c.lastName.toLowerCase().includes(search) ||
-        c.email.toLowerCase().includes(search)
+        c.email.toLowerCase().includes(search) ||
+        c.phoneNumber.includes(search)
     );
 
     renderCustomers(filtered);
@@ -46,7 +47,7 @@ function renderCustomers(customers) {
             <p><strong>Email:</strong> ${c.email}</p>
             <p><strong>Tlf:</strong> ${c.phoneNumber ?? "-"}</p>
             <p><strong>Adresse:</strong> ${c.address ?? "-"}</p>
-            <p><strong>${c.zipCode ?? ""} ${c.city ?? ""}</strong></p>
+            <p><strong>Postnummer:</strong> ${c.zipCode ?? "-"}</p>
 
             <div class="card-actions">
                 <button onclick="openEditCustomer(${c.id})">Redigér</button>

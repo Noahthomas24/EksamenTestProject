@@ -1,11 +1,18 @@
 let allOffers = [];
-let editingOfferId = null;
 
 // -------------------------------------------------
-// HENT ALLE OFFER REQUESTS
+// HENT OFFER REQUESTS
 // -------------------------------------------------
 async function loadOffers() {
-    const res = await fetch("/api/offer-requests", { credentials: "include" });
+    const res = await fetch("/api/offer-requests", {
+        credentials: "include"
+    });
+
+    if (!res.ok) {
+        alert("Kunne ikke hente tilbudsforespørgsler");
+        return;
+    }
+
     allOffers = await res.json();
     applyFilters();
 }
@@ -14,12 +21,16 @@ async function loadOffers() {
 // SØGNING
 // -------------------------------------------------
 function applyFilters() {
-    const q = document.getElementById("searchInput").value.toLowerCase();
+    const q = document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
 
     const filtered = allOffers.filter(o =>
-        o.firstName.toLowerCase().includes(q) ||
-        o.lastName.toLowerCase().includes(q) ||
-        o.description.toLowerCase().includes(q)
+        `${o.firstName} ${o.lastName}`.toLowerCase().includes(q) ||
+        (o.email && o.email.toLowerCase().includes(q)) ||
+        (o.phoneNumber && o.phoneNumber.toLowerCase().includes(q)) ||
+        (o.description && o.description.toLowerCase().includes(q))
     );
 
     renderOffers(filtered);
@@ -33,7 +44,7 @@ function renderOffers(offers) {
     list.innerHTML = "";
 
     if (offers.length === 0) {
-        list.innerHTML = "<p>Ingen forespørgsler fundet.</p>";
+        list.innerHTML = "<p><em>Ingen tilbudsforespørgsler.</em></p>";
         return;
     }
 
@@ -43,14 +54,23 @@ function renderOffers(offers) {
 
         div.innerHTML = `
             <h3>${o.firstName} ${o.lastName}</h3>
-            <p><strong>Email:</strong> ${o.email}</p>
-            <p><strong>Telefon:</strong> ${o.phone}</p>
-            <p><strong>Beskrivelse:</strong> ${o.description}</p>
-            <p><strong>Type:</strong> ${o.type}</p>
+
+            <p><strong>Email:</strong> ${o.email ?? "-"}</p>
+            <p><strong>Telefon:</strong> ${o.phoneNumber ?? "-"}</p>
+            <p><strong>Postnummer:</strong>${o.zipcode ?? "-"}</p>
+            <p><strong>Type:</strong> ${prettyType(o.type)}</p>
+
+            <p><strong>Beskrivelse:</strong></p>
+            <p>${o.description}</p>
 
             <div class="card-actions">
-                <button onclick="openEditOffer(${o.id})">Redigér</button>
-                <button class="danger" onclick="deleteOffer(${o.id})">Slet</button>
+                <button onclick="acceptOffer(${o.id})">
+                    Acceptér → Opret sag
+                </button>
+
+                <button class="danger" onclick="denyOffer(${o.id})">
+                    Afvis
+                </button>
             </div>
         `;
 
@@ -59,69 +79,54 @@ function renderOffers(offers) {
 }
 
 // -------------------------------------------------
-// ÅBN MODAL TIL REDIGERING
+// ACCEPT → OPRET SAG
 // -------------------------------------------------
-async function openEditOffer(id) {
-    editingOfferId = id;
+async function acceptOffer(id) {
+    if (!confirm("Vil du oprette en sag ud fra denne forespørgsel?")) return;
 
-    const res = await fetch(`/api/offer-requests/${id}`, { credentials: "include" });
-    const o = await res.json();
+    const res = await fetch(`/api/offer-requests/${id}/accept`, {
+        method: "PUT",
+        credentials: "include"
+    });
 
-    document.getElementById("modalTitle").textContent = "Redigér forespørgsel";
+    if (!res.ok) {
+        alert("Kunne ikke acceptere forespørgslen");
+        return;
+    }
 
-    document.getElementById("firstName").value = o.firstName;
-    document.getElementById("lastName").value = o.lastName;
-    document.getElementById("phone").value = o.phone;
-    document.getElementById("email").value = o.email;
-    document.getElementById("description").value = o.description;
-    document.getElementById("type").value = o.type;
-
-    modal.classList.remove("hidden");
+    loadOffers();
 }
 
 // -------------------------------------------------
-// GEM ÆNDRINGER
+// DENY → SLET
 // -------------------------------------------------
-document.getElementById("saveOfferBtn").onclick = async () => {
-    const updated = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        phone: document.getElementById("phone").value,
-        email: document.getElementById("email").value,
-        description: document.getElementById("description").value,
-        type: document.getElementById("type").value
-    };
+async function denyOffer(id) {
+    if (!confirm("Vil du afvise og slette denne forespørgsel?")) return;
 
-    await fetch(`/api/offer-requests/${editingOfferId}`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updated)
-    });
-
-    modal.classList.add("hidden");
-    loadOffers();
-};
-
-// -------------------------------------------------
-// SLET REQUEST
-// -------------------------------------------------
-async function deleteOffer(id) {
-    if (!confirm("Vil du slette denne forespørgsel?")) return;
-
-    await fetch(`/api/offer-requests/${id}`, {
+    const res = await fetch(`/api/offer-requests/${id}/deny`, {
         method: "DELETE",
         credentials: "include"
     });
 
+    if (!res.ok) {
+        alert("Kunne ikke slette forespørgslen");
+        return;
+    }
+
     loadOffers();
 }
 
 // -------------------------------------------------
-// MODAL CLOSE
+// TYPE VISNING
 // -------------------------------------------------
-const modal = document.getElementById("offerModal");
-document.getElementById("closeModalBtn").onclick = () => modal.classList.add("hidden");
+function prettyType(type) {
+    switch (type) {
+        case "WOODCRAFT": return "Snedker";
+        case "FURNITURE": return "Møbler";
+        case "SPECIAL": return "Specialopgave";
+        default: return type;
+    }
+}
 
 // -------------------------------------------------
 // EVENTS

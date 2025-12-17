@@ -1,5 +1,6 @@
 package dk.ek.bcrafteksamensprojekt.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Type {
@@ -16,12 +17,13 @@ public enum Type {
         this.prettyprint = prettyprint;
     }
 
-    @Override
+
     @JsonValue
     public String toString() {
         return prettyprint;
     }
 
+    @JsonCreator
     public static Type fromString(String value) {
         for (Type t : Type.values()) {
             if (t.prettyprint.equalsIgnoreCase(value) || t.name().equalsIgnoreCase(value)) {

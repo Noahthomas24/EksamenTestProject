@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8" />
+    <title>Tilbudsforespørgsler – Admin</title>
+    <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2 class="logo">B-Craft</h2>
+        <nav>
+            <a href="dashboard">Dashboard</a>
+            <a href="customers">Kunder</a>
+            <a href="cases">Sager</a>
+            <a href="materials">Materialer</a>
+            <a href="offers">Forespørgsler</a>
+            <a href="../index.html" class="logout">Til hjemmesiden →</a>
+        </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+        <header class="topbar">
+            <h1>Tilbudsforespørgsler</h1>
+
+            <div class="actions">
+                <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Søg i navn, email, telefon eller beskrivelse..."
+                />
+            </div>
+        </header>
+
+        <section id="offerList"></section>
+    </main>
+</div>
+
+<script src="../js/admin-offer-request.js"></script>
+</body>
+</html>
