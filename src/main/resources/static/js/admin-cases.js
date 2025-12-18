@@ -308,6 +308,39 @@ async function openEditCase(id) {
 }
 
 // -------------------------------------------------
+// SLET SAG
+// -------------------------------------------------
+
+async function deleteCase(id) {
+    const confirmed = confirm("Er du sikker på, at du vil slette denne sag?");
+    if (!confirmed) return;
+
+    try {
+        const res = await fetch(`/api/cases/${id}`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            const err = await res.text();
+            console.error("DELETE CASE ERROR:", err);
+            alert("Kunne ikke slette sagen.");
+            return;
+        }
+
+        // Opdater lokalt (valgfrit men hurtigere UI)
+        allCases = allCases.filter(c => c.id !== id);
+
+        // Genindlæs data / UI
+        applyFilters();
+    } catch (err) {
+        console.error("DELETE CASE FAILED:", err);
+        alert("Der opstod en fejl under sletning af sagen.");
+    }
+}
+
+
+// -------------------------------------------------
 // GEM SAG (type = "Snedker")
 // -------------------------------------------------
 document.getElementById("saveCaseBtn").onclick = async () => {
