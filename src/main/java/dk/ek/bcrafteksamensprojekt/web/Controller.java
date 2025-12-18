@@ -62,7 +62,10 @@ public class Controller {
         return "forward:/admin/materials.html";
     }
     @GetMapping("/offers")
-    public String offers() {
+    public String offers(HttpServletRequest request) {
+        if (!userAuthenticationService.validateLogin(request)){
+            return "redirect:/login";
+        }
         return "forward:/admin/offers.html";
     }
 }
