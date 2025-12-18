@@ -5,16 +5,19 @@
     <title>Få et tilbud – B-Craft</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="/css/header-footer.css">
+    <link rel="stylesheet" href="/css/offer-request.css">
 
 </head>
 <body>
 <app-header></app-header>
 
 
-<header class="site-header">
-    <h1>Få et tilbud</h1>
-    <p>Udfyld formularen nedenfor, så vender vi tilbage hurtigst muligt.</p>
-</header>
+<section class="offer-request-hero">
+    <div class="offer-request-hero-text"> <h1 class="offer-request-h1">Få et tilbud</h1>
+        <p class="offer-request-p">Udfyld formularen nedenfor, så vender vi tilbage hurtigst muligt.</p>
+    </div>
+</section>
+
 
 <main class="offer-form-wrapper">
 
@@ -47,7 +50,7 @@
 
         <div class="form-group">
             <label>Beskrivelse af opgaven</label>
-            <textarea id="description" required></textarea>
+            <input type="text" id="description" required>
         </div>
 
         <div class="form-group">

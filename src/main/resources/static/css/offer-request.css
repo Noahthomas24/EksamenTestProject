@@ -1,0 +1,87 @@
+
+.centered {
+    display: none; /* If you aren't using this specifically, it might be interfering */
+}
+
+.offer-request-hero {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    background: #F4EDE4;
+}
+
+/* Add this block to stack the text vertically */
+.offer-request-hero-text {
+    position: relative;
+    z-index: 1;
+    display: flex;           /* Enable flex for the inner container */
+    flex-direction: column;  /* Stack H1 and P vertically */
+    align-items: center;     /* Ensure they are centered horizontally */
+}
+
+.offer-request-h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    margin-top: 0;           /* Remove default browser margins */
+}
+
+.offer-request-p {
+    line-height: 1.6;
+    color: #555;
+    max-width: 500px;        /* Prevents the text from getting too wide */
+}
+
+/* The container for the whole form */
+.offer-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* This creates two equal columns */
+    gap: 2px;                      /* Space between the boxes */
+    max-width: 800px;               /* Keeps the form from getting too wide */
+    margin: 0 auto;                 /* Centers the form on the page */
+}
+
+/* Ensure each group (label + input) stays together */
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Make specific fields span both columns (1 to 3) */
+.form-group:nth-child(7), /* Type af opgave */
+.submit-btn {
+    grid-column: span 2;
+}
+
+/* Standard styling for inputs to make them look uniform */
+input, select, textarea {
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%; /* Ensures they fill their grid cell */
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+/* Responsive: Stack them on top of each other on mobile phones */
+@media (max-width: 600px) {
+    .offer-form {
+        grid-template-columns: 1fr;
+    }
+    .form-group:nth-child(7),
+    .submit-btn {
+        grid-column: span 1;
+    }
+}
+
+
+
