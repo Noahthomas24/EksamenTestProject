@@ -82,6 +82,30 @@ function triggerUpload(caseId) {
     fileInput.click(); // open picker
 }
 
+async function deleteCaseFile(caseId, fileId) {
+    const confirmed = confirm("Er du sikker på, at du vil slette dette dokument?");
+    if (!confirmed) return;
+
+    try {
+        const res = await fetch(`/api/cases/${caseId}/files/${fileId}`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            alert("Kunne ikke slette dokumentet.");
+            return;
+        }
+
+        // Refresh UI
+        loadInitialData();
+
+    } catch (err) {
+        console.error("DELETE FILE ERROR:", err);
+        alert("Der skete en fejl under sletning.");
+    }
+}
+
 async function fetchCaseFiles(caseId) {
     const res = await fetch(`/api/cases/${caseId}/files`, {
         credentials: "include"
@@ -134,11 +158,15 @@ async function renderCases(cases) {
             filesHtml = "<ul class='case-files'>";
             files.forEach(f => {
                 filesHtml += `
-                    <li>
-                        <a href="/api/cases/${c.id}/files/${f.id}">
+                    <li class="case-file-item">
+                        <a href="/api/cases/${c.id}/files/${f.id}" target="_blank">
                             ${f.originalFilename}
                         </a>
                         (${(f.fileSize / 1024 / 1024).toFixed(2)} MB)
+                        <button class="danger small"
+                            onclick="deleteCaseFile(${c.id}, ${f.id})">
+                            ✖
+                        </button>
                     </li>
                 `;
             });

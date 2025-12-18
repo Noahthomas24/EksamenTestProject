@@ -39,4 +39,15 @@ public class CaseFileController {
 
         return fileStorage.download(caseId,fileId);
     }
+
+    @DeleteMapping("/{fileId}")
+    public ResponseEntity<Void> deleteFile(
+            @PathVariable Long caseId,
+            @PathVariable Long fileId
+    ) throws IOException {
+
+        fileStorage.deleteFile(caseId, fileId);
+        return ResponseEntity.noContent().build();
+    }
+
 }

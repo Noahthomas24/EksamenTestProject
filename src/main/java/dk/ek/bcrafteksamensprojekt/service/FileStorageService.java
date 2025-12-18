@@ -6,7 +6,6 @@ import dk.ek.bcrafteksamensprojekt.model.Case;
 import dk.ek.bcrafteksamensprojekt.model.CaseFile;
 import dk.ek.bcrafteksamensprojekt.repository.CaseFileRepository;
 import dk.ek.bcrafteksamensprojekt.repository.CaseRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -106,8 +105,30 @@ public class FileStorageService {
     // LIST FILES FOR CASE
     // -------------------------------------------------
     public List<CaseFileResponseDTO> listFiles(Long caseId) {
-        return caseFileRepo.findById(caseId).stream()
+        return caseFileRepo.findAllByC_Id(caseId).stream()
                 .map(caseFileMapper::toCaseFileResponseDTO)
                 .toList();
     }
+
+    // -------------------------------------------------
+// DELETE
+// -------------------------------------------------
+    public void deleteFile(Long caseId, Long fileId) throws IOException {
+
+        CaseFile cf = caseFileRepo.findById(fileId)
+                .orElseThrow(() -> new RuntimeException("File not found"));
+
+        // Safety check
+        if (!cf.getC().getId().equals(caseId)) {
+            throw new RuntimeException("File does not belong to this case");
+        }
+
+        // Delete file from disk
+        Path filePath = uploadDir.resolve(cf.getFilename());
+        Files.deleteIfExists(filePath);
+
+        // Delete DB record
+        caseFileRepo.delete(cf);
+    }
+
 }
