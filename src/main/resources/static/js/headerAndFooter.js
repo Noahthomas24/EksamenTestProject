@@ -8,7 +8,6 @@ class AppHeader extends HTMLElement {
             <a href="services.html">Ydelser</a>
             <a href="portfolio.html">Portefølje</a>
             <a href="aboutUs.html">Om os</a>
-            <a href="contact.html">Kontakt</a>
             <a href="offer-request.html" class="btn">Få et tilbud</a>
             
         </nav>
