@@ -16,12 +16,19 @@ body {
     min-height: 100vh;
 }
 
-/* === SIDEBAR === */
+/* === SIDEBAR (FIXED) === */
 .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
     width: 240px;
+    height: 100vh;
+
     background: #8B3A3A;
     padding: 25px;
     color: white;
+
     display: flex;
     flex-direction: column;
 }
@@ -48,11 +55,11 @@ body {
 }
 
 /* === LOGOUT BUTTON === */
-.logout-btn {
+.sidebar .logout {
     margin-top: auto;
     padding: 12px 16px;
 
-    background: #742f2f;       /* deep maroon */
+    background: #742f2f;
     color: white;
 
     border: none;
@@ -67,20 +74,21 @@ body {
     box-shadow: 0 4px 12px rgba(0,0,0,0.25);
 }
 
-.logout-btn:hover {
-    background: #8B3A3A;       /* your main brand color */
+.sidebar .logout:hover {
+    background: #8B3A3A;
     transform: translateY(-1px);
 }
 
-.logout-btn:active {
+.sidebar .logout:active {
     transform: translateY(0);
     box-shadow: 0 2px 6px rgba(0,0,0,0.25);
 }
 
 /* === MAIN CONTENT === */
 .content {
-    flex: 1;
+    margin-left: 240px; /* plads til fixed sidebar */
     padding: 30px;
+    flex: 1;
 }
 
 /* === TOPBAR === */
@@ -209,6 +217,10 @@ button.danger:hover {
     .sidebar {
         width: 200px;
     }
+
+    .content {
+        margin-left: 200px;
+    }
 }
 
 @media (max-width: 600px) {
@@ -217,9 +229,15 @@ button.danger:hover {
     }
 
     .sidebar {
+        position: relative;
         width: 100%;
+        height: auto;
         flex-direction: row;
         justify-content: space-around;
+    }
+
+    .content {
+        margin-left: 0;
     }
 
     .sidebar nav a {
@@ -245,7 +263,6 @@ button.danger:hover {
     display: none;
 }
 
-/* Spinner */
 .spinner {
     width: 48px;
     height: 48px;
@@ -263,18 +280,16 @@ button.danger:hover {
 }
 
 /* ==============================
-   MODAL – OVERLAY
+   MODAL
 ============================== */
 .modal {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(3px);
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     z-index: 99999;
 }
 
@@ -282,75 +297,21 @@ button.danger:hover {
     display: none;
 }
 
-/* ==============================
-   MODAL – CONTENT
-============================== */
 .modal-content {
     background: #ffffff;
     width: 100%;
     max-width: 640px;
-
     padding: 28px 32px;
     border-radius: 12px;
-
     box-shadow:
             0 20px 40px rgba(0, 0, 0, 0.25),
             0 4px 10px rgba(0, 0, 0, 0.15);
-
-    animation: modalIn 0.2s ease-out;
-
-    /* ⭐ VIGTIG FOR OVERSKUELIGHED */
     display: flex;
     flex-direction: column;
     gap: 18px;
+    animation: modalIn 0.2s ease-out;
 }
 
-/* Modal overskrift */
-.modal-content h2 {
-    margin-bottom: 6px;
-}
-
-/* Labels */
-.modal-content label {
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-/* Inputs */
-.modal-content input,
-.modal-content textarea,
-.modal-content select {
-    width: 100%;
-    padding: 8px 10px;
-    font-size: 14px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-/* Materialer */
-#materialsContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.material-row {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-/* Modal knapper */
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
-}
-
-/* ==============================
-   MODAL – ANIMATION
-============================== */
 @keyframes modalIn {
     from {
         opacity: 0;
@@ -361,48 +322,7 @@ button.danger:hover {
         transform: translateY(0) scale(1);
     }
 }
-/* ==============================
-   CASE – MATERIAL ROW
-============================== */
-.material-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr auto;
-    gap: 12px;
-    align-items: center;
 
-    margin-bottom: 12px;
-}
-
-.material-row select,
-.material-row input {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 15px;
-}
-
-.material-row input {
-    max-width: 120px;
-}
-
-/* Pris visning */
-.material-price {
-    font-weight: 600;
-    color: #444;
-    white-space: nowrap;
-}
-
-/* Fjern-knap */
-.material-row button {
-    background: #ddd;
-    color: #333;
-    border-radius: 8px;
-    padding: 8px 12px;
-}
-
-.material-row button:hover {
-    background: #cfcfcf;
-}
 /* ===== GRAFER ===== */
 .charts {
     display: flex;
@@ -414,8 +334,8 @@ button.danger:hover {
 .chart-card {
     padding: 1.5rem;
     border-radius: 10px;
-    width: 360px;        /* 👈 styr bredden */
-    height: 360px;       /* 👈 styr højden */
+    width: 360px;
+    height: 360px;
     display: flex;
     flex-direction: column;
     align-items: center;
