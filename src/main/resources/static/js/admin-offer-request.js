@@ -18,6 +18,24 @@ async function loadOffers() {
 }
 
 // -------------------------------------------------
+// AUTH
+// -------------------------------------------------
+
+document.getElementById("logoutBtn").onclick = async () => {
+    try {
+        await fetch("/auth/logout", {
+            method: "POST",
+            credentials: "include"
+        });
+    } catch (e) {
+        console.error("Logout failed", e);
+    }
+
+    // Redirect to homepage / login
+    window.location.href = "/index.html";
+};
+
+// -------------------------------------------------
 // SØGNING
 // -------------------------------------------------
 function applyFilters() {

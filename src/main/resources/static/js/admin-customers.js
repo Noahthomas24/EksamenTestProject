@@ -29,6 +29,7 @@ function applyFilters() {
 // -------------------------------------------------
 // VIS KUNDER
 // -------------------------------------------------
+
 function renderCustomers(customers) {
     const list = document.getElementById("customerList");
     list.innerHTML = "";
@@ -44,12 +45,13 @@ function renderCustomers(customers) {
 
         div.innerHTML = `
             <h3>${c.firstName} ${c.lastName}</h3>
-            <p><strong>Email:</strong> ${c.email}</p>
+            <p><strong>Email:</strong> ${c.email ?? "-"}</p>
             <p><strong>Tlf:</strong> ${c.phoneNumber ?? "-"}</p>
             <p><strong>Adresse:</strong> ${c.address ?? "-"}</p>
             <p><strong>Postnummer:</strong> ${c.zipCode ?? "-"}</p>
 
             <div class="card-actions">
+                <button onclick="openGmail('${c.email}')">Send mail 📧</button>
                 <button onclick="openEditCustomer(${c.id})">Redigér</button>
                 <button class="danger" onclick="deleteCustomer(${c.id})">Slet</button>
             </div>
@@ -57,6 +59,19 @@ function renderCustomers(customers) {
 
         list.appendChild(div);
     });
+}
+
+function openGmail(email) {
+    const subject = "Kontakt";
+    const body = "Hej,\n\n";
+
+    const url =
+        `https://mail.google.com/mail/?view=cm&fs=1` +
+        `&to=${encodeURIComponent(email)}` +
+        `&su=${encodeURIComponent(subject)}` +
+        `&body=${encodeURIComponent(body)}`;
+
+    window.open(url, "_blank", "noopener,noreferrer");
 }
 
 // -------------------------------------------------
