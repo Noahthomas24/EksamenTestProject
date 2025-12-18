@@ -1,10 +1,13 @@
 let caseStatusChart;
-let offerTypeChart;
+let materialPerCaseChart;
 
 document.addEventListener("DOMContentLoaded", () => {
     loadDashboard();
 });
 
+// ------------------------------------------------------
+// LOADING
+// ------------------------------------------------------
 function showLoading() {
     document.getElementById("loadingOverlay").classList.remove("hidden");
 }
@@ -45,10 +48,8 @@ async function loadDashboard() {
 
         // 🟩 Grafer
         renderCaseChart(openCases, closedCases);
-        renderOfferTypeChart(offers);
+        renderMaterialPerCaseChart(cases);
 
-        // 🟧 Aktivitet
-        renderActivityLog(cases, offers);
 
     } catch (err) {
         console.error("Dashboard fejl:", err);
@@ -83,85 +84,62 @@ function renderCaseChart(openCount, closedCount) {
     });
 }
 
-// ------------------------------------------------------
-// ⭐ GRAF: Fordeling af tilbudstyper
-// ------------------------------------------------------
-function renderOfferTypeChart(offers) {
-    if (offerTypeChart) offerTypeChart.destroy();
+function renderMaterialPerCaseChart(cases) {
+    if (materialPerCaseChart) materialPerCaseChart.destroy();
 
-    const typeCounts = {
-        Snedker: 0,
-        Møbler: 0,
-        Specielopgave: 0
-    };
+    const labels = [];
+    const data = [];
 
-    offers.forEach(o => {
-        if (typeCounts[o.type] !== undefined) {
-            typeCounts[o.type]++;
-        }
+    cases.forEach(c => {
+        let total = 0;
+
+        c.materials?.forEach(cm => {
+            total += (cm.quantity || 0) * (cm.unitPrice || 0);
+        });
+
+        labels.push(c.title);
+        data.push(total);
     });
 
-    const ctx = document.getElementById("offerTypeChart");
+    const ctx = document.getElementById("materialPerCaseChart");
 
-    offerTypeChart = new Chart(ctx, {
+    materialPerCaseChart = new Chart(ctx, {
         type: "bar",
         data: {
-            labels: ["Snedker", "Møbler", "Specialopgave"],
+            labels,
             datasets: [{
-                data: [
-                    typeCounts.Snedker,
-                    typeCounts.Møbler,
-                    typeCounts.Specielopgave
-                ],
-                backgroundColor: ["#2196F3", "#FFC107", "#9C27B0"]
+                label: "Samlet materialepris (kr.)",
+                data,
+                backgroundColor: "#8BC34A"
             }]
         },
         options: {
             responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.raw + " kr."
+                    }
+                }
+            },
             scales: {
-                y: { beginAtZero: true }
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: v => v + " kr."
+                    }
+                }
             }
         }
     });
 }
 
+
+
 // ------------------------------------------------------
-// ⭐ Seneste aktivitet
-// ------------------------------------------------------
-function renderActivityLog(cases, offers) {
-    const log = document.getElementById("activityLog");
-    log.innerHTML = "";
-
-    const activities = [];
-
-    cases.slice(-5).forEach(c => {
-        activities.push({
-            text: `Sag: ${c.title} (${c.status})`,
-            when: c.id
-        });
-    });
-
-    offers.slice(-5).forEach(o => {
-        activities.push({
-            text: `Forespørgsel fra ${o.firstName} ${o.lastName}`,
-            when: o.id + 10000
-        });
-    });
-
-    activities
-        .sort((a, b) => b.when - a.when)
-        .slice(0, 8)
-        .forEach(a => {
-            const li = document.createElement("li");
-            li.textContent = a.text;
-            log.appendChild(li);
-        });
-}
-
-// -------------------------------------------------
 // AUTH
-// -------------------------------------------------
-
+// ------------------------------------------------------
 document.getElementById("logoutBtn").onclick = async () => {
     try {
         await fetch("/auth/logout", {
@@ -172,6 +150,5 @@ document.getElementById("logoutBtn").onclick = async () => {
         console.error("Logout failed", e);
     }
 
-    // Redirect to homepage / login
     window.location.href = "/index.html";
 };
