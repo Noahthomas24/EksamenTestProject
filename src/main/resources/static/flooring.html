@@ -1,10 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8">
+  <title>Terrasse – B-Craft</title>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/service.css">
 </head>
+
+<app-header></app-header>
+
 <body>
+
+<!-- HERO -->
+<section class="service-hero">
+  <div class="service-hero-img"
+       style="background-image: url('/img/services/floorhero.png');">
+  </div>
+
+  <div class="service-hero-text">
+    <h1>Nye gulve</h1>
+    <p>Helt nye gulve, præcis som du ønsker</p>
+  </div>
+</section>
+
+<!-- CONTENT SECTION 1 -->
+<section class="service-section reveal">
+  <div class="service-text">
+    <h2>Gulve i kvalitet</h2>
+    <p>
+      Dette er placeholder-tekst. Her kan du beskrive materialer,
+      håndværk og processen bag terraseløsninger.
+    </p>
+    <p>
+      Fokus kan være på funktionalitet, design og holdbarhed.
+    </p>
+  </div>
+
+  <div class="service-image">
+    <img src="/img/services/floor1.jpg" alt="Køkken projekt">
+  </div>
+</section>
+
+<!-- CONTENT SECTION 2 (reversed) -->
+<section class="service-section reverse reveal">
+  <div class="service-text">
+    <h2>Tilpasset til dit hjem</h2>
+    <p>
+      Placeholder-tekst. Her kan du forklare hvordan løsninger
+      tilpasses kundens behov, mål og stil.
+    </p>
+  </div>
+
+  <div class="service-image">
+    <img src="/img/services/gulv.jpg" alt="Køkken detalje">
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="service-cta reveal">
+  <h2>Drømmer du om et nyt gulv?</h2>
+  <p>Kontakt os for en uforpligtende snak om dine idéer.</p>
+  <a href="offer-request.html" class="btn">Få et tilbud</a>
+</section>
+
+<app-footer></app-footer>
+
+<script src="js/headerAndFooter.js"></script>
+<script src="js/service.js"></script>
 
 </body>
 </html>

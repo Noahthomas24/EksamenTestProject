@@ -2,7 +2,9 @@ class AppHeader extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
       <header>
-      <div class="logo">B-Craft</div>
+      <div class="logo">
+         <a href="index.html">B-Craft</a>
+      </div>
         <nav>
             <a href="index.html">Forside</a>
             <div class="dropdown">

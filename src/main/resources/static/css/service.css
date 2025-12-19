@@ -1,0 +1,89 @@
+/* ===============================
+   SERVICE HERO
+================================*/
+
+.service-hero {
+    position: relative;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.service-hero-img {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55);
+    z-index: -1;
+}
+
+.service-hero-text {
+    padding: 0 80px;
+    max-width: 700px;
+}
+
+.service-hero-text h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+/* ===============================
+   CONTENT SECTIONS
+================================*/
+
+.service-section {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    padding: 80px;
+}
+
+.service-section.reverse {
+    flex-direction: row-reverse;
+}
+
+.service-text {
+    flex: 1;
+}
+
+.service-text h2 {
+    margin-bottom: 15px;
+}
+
+.service-image {
+    flex: 1;
+}
+
+.service-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* ===============================
+   CTA
+================================*/
+
+.service-cta {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: #f5f5f5;
+}
+
+/* ===============================
+   RESPONSIVE
+================================*/
+
+@media (max-width: 900px) {
+    .service-section,
+    .service-section.reverse {
+        flex-direction: column;
+        padding: 50px 25px;
+    }
+
+    .service-hero-text {
+        padding: 0 30px;
+    }
+}
